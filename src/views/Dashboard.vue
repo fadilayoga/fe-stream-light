@@ -9,7 +9,7 @@
         :chart="getChartData(item._id)"
       />
     </div>
-    <div class="problem">
+    <!-- <div class="problem">
       <div class="problem-title">
         <p class="problem-title_group">
           Problem <span class="logo-bold">Info</span>
@@ -26,7 +26,7 @@
           <p class="problem-item_timestamp">10/12/2022</p>
         </div>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -86,7 +86,7 @@ export default {
 <style lang="scss">
 .container {
   display: grid;
-  grid-template-columns: auto 360px;
+  grid-template-columns: auto;
   grid-template-rows: auto;
   box-sizing: border-box;
   height: 100%;

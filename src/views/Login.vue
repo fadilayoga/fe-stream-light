@@ -38,6 +38,12 @@ export default {
       password: ''
     }
   },
+  mounted: function () {
+    document.body.style.backgroundColor = "#E5E5E5";
+  },
+  destroyed: function () {
+    document.body.style.backgroundColor = null;
+  },
   methods: {
     ...mapActions([
       'signIn', // map `this.increment()` to `this.$store.dispatch('increment')`
@@ -64,7 +70,7 @@ export default {
   min-height: 100vh;
   position: relative;
   display: flex;
-  background-color: $grey;
+  // background-color: $grey;
 }
 
 .login-form {

@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import AuthHelper from '../utils/auth-helper'
+import moment from 'moment'
 
 Vue.use(Vuex)
 Vue.config.devtools = true
@@ -65,24 +66,28 @@ export default new Vuex.Store({
     },
     setLighting({ commit }, payload) {
       commit('LIGHTING', payload.payload)
-    }
+    },  
   },
   getters: {
     getAllLighting(state) {
       return state.allLighting.lighting
     },
-    getLightingLog: (state) => (id) => {
+    getLightingLog: (state, getters) => (id) => {
       let chartData = state.allLighting.lightingLog.filter(data => data.lighting._id == id)
       let labels = []
       let data = []
       for (let item of chartData) {
-        labels.push(item.timestamp)
+        labels.push(getters.getTime(item.timestamp))
         data.push(item.ldr)
       }
       return {
         labels,
         data
       }
+    },
+    getTime: (state) => (pastTime) => {
+      let now = moment(pastTime).format('DMYY:Hms');
+      return now
     },
   },
   modules: {}

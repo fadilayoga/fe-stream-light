@@ -18,17 +18,26 @@
             <img class="left-panel_menu-icon-svg" v-if="isExactActive" src="~@/assets/images/warning-active.svg" alt="">          
             <img v-else class="left-panel_menu-icon-svg" src="~@/assets/images/warning-inactive.svg" alt="">
           </div>
-          <p :class="[isActive && 'router-link-active', isExactActive && 'router-link-exact-active', 'left-panel_menu-link']">Logs</p>
+          <p :class="[isActive && 'router-link-active', isExactActive && 'router-link-exact-active', 'left-panel_menu-link']">Log</p>
+        </a>
+      </router-link>
+      <router-link class="left-panel" to="/users" v-slot="{ href, navigate, isActive, isExactActive }">
+        <a :href="href" @click="navigate" :class="[isActive && 'router-link-active', isExactActive && 'router-link-exact-active', 'left-panel_menu']">
+          <div :class="[isActive && 'router-link-active', isExactActive && 'router-link-exact-active', 'left-panel_menu-icon']">
+            <img class="left-panel_menu-icon-svg" v-if="isExactActive" src="~@/assets/images/user-management-active.svg" alt="">          
+            <img v-else class="left-panel_menu-icon-svg" src="~@/assets/images/user-management-inactive.svg" alt="">
+          </div>
+          <p :class="[isActive && 'router-link-active', isExactActive && 'router-link-exact-active', 'left-panel_menu-link']">User Management</p>
         </a>
       </router-link>
     </div>
     <div class="grid-two">
       <div class="navbar-menu">
-        <div class="navbar-dropdown">
+        <div @click="openDialog" class="navbar-dropdown">
           <img src="~@/assets/images/icons/hamburger-black.svg" alt=""/>
           <img src="~@/assets/images/icons/user-outline-black.svg" alt=""/>
         </div>
-        <div v-if="login" class="navbar-dropdown_menu">
+        <div v-if="profileMenu" v-click-outside="closeDialog" class="navbar-dropdown_menu">
           <router-link to="/login" class="navbar-dropdown_menu-login">Login</router-link>
           <router-link to="/register" class="navbar-dropdown_menu-register">Register</router-link>
         </div>
@@ -49,9 +58,15 @@
 export default {
   name: "Home",
   components: {},
+  mounted: function () {
+    document.body.style.backgroundColor = "#2a2e59";
+  },
+  destroyed: function () {
+    document.body.style.backgroundColor = null;
+  },
   data() {
     return {
-      login: false
+      profileMenu: false,
     }
   },
   computed: {
@@ -62,17 +77,27 @@ export default {
       let upperCase = stringSplit.charAt(0).toUpperCase() + stringSplit.slice(1)
       return upperCase
     }
+  },
+  methods: {
+    openDialog() {
+      this.profileMenu = true;
+    },
+    closeDialog() {
+      this.profileMenu = false;
+    },
   }
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .grid-container {
   display: grid;
   grid-template-columns: 230px auto;
   grid-template-rows: 60px auto;
   gap: 10px;
   padding: 10px;
+  max-width: 1366px;
+  margin: auto;
 }
 
 .grid-one {

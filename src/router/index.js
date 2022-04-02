@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 import Logs from '../views/Logs.vue'
+import Users from '../views/Users.vue'
 import Dashboard from '../views/Dashboard.vue'
 
 Vue.use(VueRouter)
@@ -19,6 +20,10 @@ const routes = [
       {
         path: 'logs',
         component: Logs,
+      },
+      {
+        path: 'users',
+        component: Users,
       },
     ],
   },

@@ -39,6 +39,5 @@ body {
   margin: 0px !important;
   padding: 0px !important;
   min-height: 100%;
-  background-color: $violet;
 }
 </style>
