@@ -16,6 +16,10 @@ export default new Vuex.Store({
       isConnected: false,
       ldr: [],
       reconnectError: false,
+    },
+    form: {
+      addForm: false,
+      isFormActive: false
     }
   },
   mutations: {
@@ -53,7 +57,25 @@ export default new Vuex.Store({
       state.socket.reconnectError = true;
     },
     LIGHTING(state, payload) {
-      state.allLighting = payload      
+      state.allLighting = payload
+    },
+    ADD_FORM(state, payload) {
+      state.form = {
+        addForm: true,
+        isFormActive: true
+      }
+    },
+    UPDATE_FORM(state, payload) {
+      state.form = {
+        addForm: false,
+        isFormActive: true
+      }
+    },
+    CLOSE_FORM(state, payload) {
+      state.form = {
+        addForm: state.form.addForm,
+        isFormActive: false
+      }
     }
   },
   actions: {
@@ -64,9 +86,26 @@ export default new Vuex.Store({
     signOut() {
       AuthHelper.signOut()
     },
-    setLighting({ commit }, payload) {
+    setLighting({
+      commit
+    }, payload) {
       commit('LIGHTING', payload.payload)
-    },  
+    },
+    addForm({
+      commit
+    }) {
+      commit('ADD_FORM')
+    },
+    updateForm({
+      commit
+    }) {
+      commit('UPDATE_FORM')
+    },
+    closeForm({
+      commit
+    }) {
+      commit('CLOSE_FORM')
+    }
   },
   getters: {
     getAllLighting(state) {
@@ -89,6 +128,9 @@ export default new Vuex.Store({
       let now = moment(pastTime).format('DMYY:Hms');
       return now
     },
+    getForm(state) {
+      return state.form
+    }
   },
   modules: {}
 })

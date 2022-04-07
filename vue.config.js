@@ -2,6 +2,9 @@ const ServiceWorkerWebpackPlugin = require('serviceworker-webpack-plugin');
 const path = require('path');
 
 module.exports = {
+  devServer: {
+    disableHostCheck: true
+  },
   lintOnSave: false,
   configureWebpack: {
     plugins: [

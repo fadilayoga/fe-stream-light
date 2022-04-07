@@ -40,4 +40,8 @@ body {
   padding: 0px !important;
   min-height: 100%;
 }
+
+body.modal-open {
+  overflow: hidden;
+}
 </style>

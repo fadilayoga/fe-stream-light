@@ -5,8 +5,18 @@
       <p class="title--description">
         Sign in and start managing your candidates!
       </p>
-      <input v-model="email" class="input-email" type="email" placeholder="Login" />
-      <input v-model="password" class="input-password" type="password" placeholder="Password" />
+      <input
+        v-model="email"
+        class="input-email"
+        type="email"
+        placeholder="Login"
+      />
+      <input
+        v-model="password"
+        class="input-password"
+        type="password"
+        placeholder="Password"
+      />
       <div class="pretty p-svg p-curve">
         <input type="checkbox" />
         <div class="state p-success">
@@ -19,7 +29,10 @@
           <label>Remember me</label>
         </div>
       </div>
-      <button @click="signIn({ email, password })" class="btn-login">LOGIN</button>
+      <button @click="submit()" class="btn-login">
+        <span v-if="!loading">LOGIN</span>
+        <circle2 v-else class="btn-login_spinner"></circle2>
+      </button>
     </div>
     <div class="wave">
       <img class="wave-two" src="~@/assets/images/wave_two.svg" alt="" />
@@ -29,14 +42,20 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions } from "vuex";
+import { Circle2 } from "vue-loading-spinner";
 
 export default {
-  data(){
+  components: {
+    Circle2,
+  },
+  data() {
     return {
-      email: '',
-      password: ''
-    }
+      email: "",
+      password: "",
+      Circle2,
+      loading: false,
+    };
   },
   mounted: function () {
     document.body.style.backgroundColor = "#E5E5E5";
@@ -45,11 +64,10 @@ export default {
     document.body.style.backgroundColor = null;
   },
   methods: {
-    ...mapActions([
-      'signIn', // map `this.increment()` to `this.$store.dispatch('increment')`
-    ]),
-  }
-
+    submit() {
+      this.loading = true;
+    },
+  },
 };
 </script>
 
@@ -70,7 +88,6 @@ export default {
   min-height: 100vh;
   position: relative;
   display: flex;
-  // background-color: $grey;
 }
 
 .login-form {
@@ -79,12 +96,15 @@ export default {
   margin: auto;
   border-radius: 10px;
   z-index: 1;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .wave {
-  position: absolute;
+  position: fixed;
   width: 100%;
-  height: 100vh;
   bottom: 0;
 
   &-one {
@@ -115,8 +135,8 @@ export default {
 }
 
 .input-email {
-  width: 300px;
-  height: 35px;
+  width: 100%;
+  height: 60px;
   font-size: 16px;
   line-height: 20px;
   border-radius: 10px;
@@ -125,11 +145,12 @@ export default {
   margin-top: 20px;
   background-color: #224957;
   color: white;
+  box-sizing: border-box;
 }
 
 .input-password {
-  width: 300px;
-  height: 35px;
+  width: 100%;
+  height: 60px;
   font-size: 16px;
   line-height: 20px;
   border-radius: 10px;
@@ -138,6 +159,7 @@ export default {
   margin-top: 32px;
   background-color: #224957;
   color: white;
+  box-sizing: border-box;
 }
 
 .pretty {
@@ -145,12 +167,12 @@ export default {
 }
 
 .btn-login {
-  display: block;
-  height: 35px;
-  width: 300px;
+  display: flex;
+  height: 60px;
+  width: 100%;
   margin: 24px auto;
   padding: 12px 18px;
-  box-sizing: content-box;
+  box-sizing: border-box;
   border-radius: 10px;
   border: none;
   background-color: #20df7f;
@@ -158,12 +180,127 @@ export default {
   font-size: 16px;
   line-height: 20px;
 
+  &:hover {
+    cursor: pointer;
+  }
+
   &:active {
     transform: translateY(1px);
   }
+
+  & span {
+    color: black;
+    margin: auto;
+  }
+
+  &_spinner {
+    max-width: 30px;
+    max-height: 30px;
+    margin: auto;
+  }
 }
 
-label{
+label {
   color: #224957;
+}
+
+@media screen and (max-width: 768px) {
+  .login-form {
+    width: 325px;
+    height: fit-content;
+    margin: auto;
+    border-radius: 10px;
+    z-index: 1;
+    padding: 20px;
+  }
+
+  .wave {
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+
+    &-one {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      opacity: 0.8;
+    }
+
+    &-two {
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      opacity: 0.8;
+    }
+  }
+
+  .title {
+    font-size: 48px;
+    color: #224957;
+    margin: 0;
+
+    &--description {
+      margin-top: 20px;
+      font-size: 14px;
+      color: #224957;
+    }
+  }
+
+  .input-email {
+    width: 100%;
+    height: 45px;
+    font-size: 14px;
+    line-height: 18px;
+    border-radius: 10px;
+    padding: 12px 18px;
+    border: none;
+    margin-top: 15px;
+    background-color: #224957;
+    color: white;
+    box-sizing: border-box;
+  }
+
+  .input-password {
+    width: 100%;
+    height: 45px;
+    font-size: 14px;
+    line-height: 18px;
+    border-radius: 10px;
+    padding: 12px 18px;
+    border: none;
+    margin-top: 12px;
+    background-color: #224957;
+    color: white;
+    box-sizing: border-box;
+  }
+
+  .pretty {
+    margin-top: 18px;
+  }
+
+  .btn-login {
+    display: block;
+    height: 45px;
+    width: 100%;
+    margin: 18px 0 0 0;
+    padding: 10px 16px;
+    box-sizing: border-box;
+    border-radius: 10px;
+    border: none;
+    background-color: #20df7f;
+    color: #224957;
+    font-size: 14px;
+    line-height: 18px;
+
+    &:active {
+      transform: translateY(1px);
+    }
+
+    &_spinner {
+      max-width: 25px;
+      max-height: 25px;
+      margin: auto;
+    }
+  }
 }
 </style>

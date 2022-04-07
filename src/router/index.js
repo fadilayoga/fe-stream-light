@@ -10,26 +10,34 @@ Vue.use(VueRouter)
 const routes = [
   {
     path: '/',
-    name: 'Home',
+    name: 'home',
     component: Home,
     children: [
       {
         path: '',
+        name: 'home',
         component: Dashboard,
       },
       {
         path: 'logs',
+        name: 'logs',
         component: Logs,
       },
       {
         path: 'users',
+        name: 'users',
         component: Users,
       },
     ],
   },
   {
+    path: '/profile',
+    name: 'profile',
+    component: () => import(/* webpackChunkName: "about" */ '../views/Profile.vue')
+  },
+  {
     path: '/login',
-    name: 'Login',
+    name: 'login',
     component: () => import(/* webpackChunkName: "about" */ '../views/Login.vue')
   }
 ]

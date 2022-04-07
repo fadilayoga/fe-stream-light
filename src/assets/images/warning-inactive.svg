@@ -1,13 +1,1 @@
-<svg width="32px" height="32px" viewBox="0 0 32 32" id="icon" xmlns="http://www.w3.org/2000/svg">
-  <defs>
-    <style>
-      .cls-1 {
-        fill: none;
-      }
-    </style>
-  </defs>
-  <path style="fill:#3979F6;" d="M16,21a1.5,1.5,0,1,0,1.5,1.5A1.5,1.5,0,0,0,16,21Z"/>
-  <rect style="fill:#3979F6;" x="15" y="8" width="2" height="10"/>
-  <path style="fill:#3979F6;" d="M23,29H9a1,1,0,0,1-.8638-.4961l-7-12a1,1,0,0,1,0-1.0078l7-12A1,1,0,0,1,9,3H23a1,1,0,0,1,.8638.4961l7,12a1,1,0,0,1,0,1.0078l-7,12A1,1,0,0,1,23,29ZM9.5742,27H22.4258l6.4165-11L22.4258,5H9.5742L3.1577,16Z"/>
-  <rect id="_Transparent_Rectangle_" data-name="&lt;Transparent Rectangle&gt;" class="cls-1" width="32" height="32"/>
-</svg>
+<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#3979F6"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
