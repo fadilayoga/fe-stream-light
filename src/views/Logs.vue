@@ -8,14 +8,18 @@
           <th>Lighting</th>
           <th>Issue Date</th>
           <th class="ta-center">Fixed</th>
-          <th>Fixed Date</th>
+          <!-- <th>Fixed Date</th> -->
+          <th class="ta-center">Location</th>
         </tr>
-        <tr v-for="(data, index) in logs" :key="data._id">
+        <tr v-for="(data, index) in logs.results" :key="data._id">
           <td class="ta-center">{{ (pages - 1) * limit + (index + 1) }}</td>
           <td>Magazzini Alimentari Riuniti</td>
           <td>12/10/2021</td>
           <td class="ta-center"><button @click="confirm()">CONFIRM</button></td>
-          <td>16/11/2021</td>
+          <!-- <td>16/11/2021</td> -->
+          <td class="ta-center">
+            <button @click="seeLocation(data)">LOCATION</button>
+          </td>
         </tr>
       </table>
     </div>
@@ -89,7 +93,6 @@ export default {
       axios
         .get(`${API_ENDPOINT.PROBLEM_LOGS}?page=${page}&limit=${this.limit}`)
         .then((response) => {
-          // let response = {data: {"total_pages":5,"next":2,"results":[{"_id":"62189ad79328d6a81d1a07e0","lighting":"621724a710507ec2ab646f7b","problem":"lighting error","solvedId":null,"timestamp":"2022-02-25T08:50:07.199Z","__v":0},{"_id":"6218a11e124fcc9aa0becee7","lighting":"6218a11e124fcc9aa0becee1","problem":"lighting error","solvedId":null,"timestamp":"2022-02-25T09:21:00.053Z","__v":0},{"_id":"6218a1c5124fcc9aa0becf0d","lighting":"6218a1c5124fcc9aa0becf07","problem":"lighting error","solvedId":null,"timestamp":"2022-02-25T09:21:00.053Z","__v":0},{"_id":"6218a1d6124fcc9aa0becf1b","lighting":"6218a11e124fcc9aa0becee1","problem":"lighting error","solvedId":null,"timestamp":"2022-02-25T09:21:00.053Z","__v":0},{"_id":"6218a286124fcc9aa0becf24","lighting":"6218a11e124fcc9aa0becee1","problem":"lighting error","solvedId":null,"timestamp":"2022-02-25T09:21:00.053Z","__v":0},{"_id":"6218a2cae50141d057c46ccd","lighting":"6218a11e124fcc9aa0becee1","problem":"lighting error","solvedId":null,"timestamp":"2022-02-25T09:35:04.924Z","__v":0},{"_id":"6218a32be50141d057c46cdc","lighting":"621724a710507ec2ab646f7b","problem":"lighting error","solvedId":null,"timestamp":"2022-02-25T09:35:04.924Z","__v":0}]}}
           this.pages = page;
           this.total_pages = response.data.total_pages;
           this.next = response.data.next || {};
@@ -115,13 +118,20 @@ export default {
         }
       });
     },
+    seeLocation: async function (data) {
+      const { lat, long } = data.log.location;
+      if (!this.$device.mobile) {
+        window.open(`https://www.google.com/maps/search/?api=1&query=${lat}%2C${long}`);
+      } else {
+        window.location.href = `geo:${lat},${long}?q=${lat},${long}(lighting)`;
+      }
+    },
   },
 };
 </script>
 
 <style lang="scss" scoped>
 .logs {
-  // width: fit-content;
   height: fit-content;
   border-radius: 10px;
   background-color: $dark-violet;
@@ -188,7 +198,7 @@ th {
   display: flex;
   padding: 2px;
   border-radius: 3px;
-  gap: 2px;  
+  gap: 2px;
   &-item {
     display: flex;
     justify-content: center;
@@ -295,7 +305,7 @@ button {
     display: flex;
     padding: 2px;
     border-radius: 3px;
-    gap: 2px;    
+    gap: 2px;
     &-item {
       display: flex;
       justify-content: center;
@@ -328,7 +338,7 @@ button {
         align-items: center;
         gap: 3px;
 
-        & img{
+        & img {
           max-width: 20px;
         }
 

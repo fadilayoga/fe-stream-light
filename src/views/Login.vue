@@ -9,15 +9,17 @@
         v-model="email"
         class="input-email"
         type="email"
-        placeholder="Login"
+        placeholder="Email"
+        @keyup.enter="login()"
       />
       <input
         v-model="password"
         class="input-password"
         type="password"
         placeholder="Password"
+        @keyup.enter="login()"
       />
-      <div class="pretty p-svg p-curve">
+      <!-- <div class="pretty p-svg p-curve">
         <input type="checkbox" />
         <div class="state p-success">
           <svg class="svg svg-icon" viewBox="0 0 20 20">
@@ -28,8 +30,8 @@
           </svg>
           <label>Remember me</label>
         </div>
-      </div>
-      <button @click="submit()" class="btn-login">
+      </div> -->
+      <button @click="login()" class="btn-login">
         <span v-if="!loading">LOGIN</span>
         <circle2 v-else class="btn-login_spinner"></circle2>
       </button>
@@ -42,7 +44,7 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
+import { mapGetters } from "vuex";
 import { Circle2 } from "vue-loading-spinner";
 
 export default {
@@ -63,11 +65,21 @@ export default {
   destroyed: function () {
     document.body.style.backgroundColor = null;
   },
+  computed: {
+    ...mapGetters(["getLoginStatus"]),
+  },
   methods: {
-    submit() {
+    login: async function () {
       this.loading = true;
+      await this.$store.dispatch('login', { email: this.email, password: this.password })
+      this.loading = false;
     },
   },
+  watch: {
+    getLoginStatus(newVal, oldVal){
+      this.$router.push({ name: 'home' })      
+    }
+  }
 };
 </script>
 
@@ -91,7 +103,8 @@ export default {
 }
 
 .login-form {
-  width: 350px;
+  max-width: 350px;
+  width: 100%;
   height: fit-content;
   margin: auto;
   border-radius: 10px;
@@ -100,6 +113,7 @@ export default {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  box-sizing: border-box;
 }
 
 .wave {
@@ -156,7 +170,7 @@ export default {
   border-radius: 10px;
   padding: 12px 18px;
   border: none;
-  margin-top: 32px;
+  margin-top: 24px;
   background-color: #224957;
   color: white;
   box-sizing: border-box;
@@ -170,7 +184,7 @@ export default {
   display: flex;
   height: 60px;
   width: 100%;
-  margin: 24px auto;
+  margin: 48px auto 0 auto;
   padding: 12px 18px;
   box-sizing: border-box;
   border-radius: 10px;
@@ -206,7 +220,7 @@ label {
 
 @media screen and (max-width: 768px) {
   .login-form {
-    width: 325px;
+    max-width: 350px;    
     height: fit-content;
     margin: auto;
     border-radius: 10px;
@@ -268,7 +282,7 @@ label {
     border-radius: 10px;
     padding: 12px 18px;
     border: none;
-    margin-top: 12px;
+    margin-top: 18px;
     background-color: #224957;
     color: white;
     box-sizing: border-box;
@@ -282,7 +296,7 @@ label {
     display: block;
     height: 45px;
     width: 100%;
-    margin: 18px 0 0 0;
+    margin: 36px auto 0 auto;
     padding: 10px 16px;
     box-sizing: border-box;
     border-radius: 10px;

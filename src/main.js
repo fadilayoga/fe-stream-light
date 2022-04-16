@@ -7,8 +7,11 @@ import router from './router'
 import store from './store'
 import VueNativeSock from 'vue-native-websocket'
 import vClickOutside from 'v-click-outside'
+import device from "vue-device-detector"
+import CONFIG from './globals/config';
+import Vuelidate from 'vuelidate'
 
-Vue.use(VueNativeSock, 'ws://localhost:3000', {
+Vue.use(VueNativeSock, CONFIG.WEB_SOCKET, {
   store: store,
   format: 'json',
   reconnection: true, // (Boolean) whether to reconnect automatically (false)
@@ -17,6 +20,10 @@ Vue.use(VueNativeSock, 'ws://localhost:3000', {
 })
 
 Vue.use(vClickOutside)
+
+Vue.use(device)
+
+Vue.use(Vuelidate)
 
 Vue.config.productionTip = false
 

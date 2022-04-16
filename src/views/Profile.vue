@@ -22,12 +22,7 @@
           v-click-outside="closeDialog"
           class="navbar-dropdown_menu"
         >
-          <router-link to="/profile" class="navbar-dropdown_menu-profile"
-            >Profile</router-link
-          >
-          <router-link to="/login" class="navbar-dropdown_menu-login"
-            >Login</router-link
-          >
+          <p @click="logout" class="navbar-dropdown_menu-login">Logout</p>
         </div>
       </div>
     </div>
@@ -52,6 +47,7 @@
           to="/"
           class="nav--link"
           v-slot="{ href, navigate, isActive, isExactActive }"
+          custom
         >
           <a :href="href" @click="navigate">
             <img
@@ -73,6 +69,7 @@
           to="/logs"
           class="nav--link"
           v-slot="{ href, navigate, isActive, isExactActive }"
+          custom
         >
           <a :href="href" @click="navigate">
             <img
@@ -94,6 +91,7 @@
           to="/users"
           class="nav--link"
           v-slot="{ href, navigate, isActive, isExactActive }"
+          custom
         >
           <a :href="href" @click="navigate">
             <img
@@ -115,6 +113,7 @@
           to="/profile"
           class="nav--link"
           v-slot="{ href, navigate, isActive, isExactActive }"
+          custom
         >
           <a :href="href" @click="navigate">
             <img
@@ -139,6 +138,7 @@
 
 <script>
 import { showAt, hideAt } from "vue-breakpoints";
+import { mapActions } from 'vuex'
 export default {
   components: { hideAt, showAt },
   data() {
@@ -153,6 +153,7 @@ export default {
     document.body.style.backgroundColor = null;
   },
   methods: {
+    ...mapActions(['logout']),
     openDialog() {
       this.profileMenu = true;
     },
@@ -247,14 +248,11 @@ export default {
       font-size: 16px;
 
       &-login {
-        font-weight: 400;
-      }
-      &-profile {
         font-weight: 600;
       }
     }
 
-    &_menu a {
+    &_menu p {
       text-align: left;
       margin: 0;
       color: black;
@@ -366,9 +364,6 @@ export default {
         font-size: 15px;
 
         &-login {
-          font-weight: 400;
-        }
-        &-profile {
           font-weight: 600;
         }
       }

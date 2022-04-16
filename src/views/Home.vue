@@ -12,6 +12,7 @@
               class="left-panel"
               to="/"
               v-slot="{ href, navigate, isActive, isExactActive }"
+              custom
             >
               <a
                 :href="href"
@@ -57,6 +58,7 @@
               class="left-panel"
               to="/logs"
               v-slot="{ href, navigate, isActive, isExactActive }"
+              custom
             >
               <a
                 :href="href"
@@ -102,6 +104,7 @@
               class="left-panel"
               to="/users"
               v-slot="{ href, navigate, isActive, isExactActive }"
+              custom
             >
               <a
                 :href="href"
@@ -161,9 +164,7 @@
                 <router-link to="/profile" class="navbar-dropdown_menu-profile"
                   >Profile</router-link
                 >
-                <router-link to="/login" class="navbar-dropdown_menu-login"
-                  >Login</router-link
-                >
+                <p @click="logout" class="navbar-dropdown_menu-login">Logout</p>
               </div>
             </div>
           </div>
@@ -210,11 +211,7 @@
                 class="grid_mobile-grid-one-navbar-dropdown_menu-profile"
                 >Profile</router-link
               >
-              <router-link
-                to="/login"
-                class="grid_mobile-grid-one-navbar-dropdown_menu-login"
-                >Login</router-link
-              >
+              <p @click="logout" class="grid_mobile-grid-one-navbar-dropdown_menu-login">Logout</p>
             </div>
           </div>
         </div>
@@ -228,6 +225,7 @@
             to="/"
             class="nav--link"
             v-slot="{ href, navigate, isActive, isExactActive }"
+            custom
           >
             <a :href="href" @click="navigate">
               <img
@@ -249,6 +247,7 @@
             to="/logs"
             class="nav--link"
             v-slot="{ href, navigate, isActive, isExactActive }"
+            custom
           >
             <a :href="href" @click="navigate">
               <img
@@ -282,6 +281,7 @@
             to="/users"
             class="nav--link"
             v-slot="{ href, navigate, isActive, isExactActive }"
+            custom
           >
             <a :href="href" @click="navigate">
               <img
@@ -303,6 +303,7 @@
             to="/profile"
             class="nav--link"
             v-slot="{ href, navigate, isActive, isExactActive }"
+            custom
           >
             <a :href="href" @click="navigate">
               <img
@@ -328,6 +329,7 @@
 
 <script>
 import { showAt, hideAt } from "vue-breakpoints";
+import { mapActions } from 'vuex'
 export default {
   name: "Home",
   components: { hideAt, showAt },
@@ -359,6 +361,7 @@ export default {
     },
   },
   methods: {
+    ...mapActions(['logout']),
     openDialog() {
       this.profileMenu = true;
     },
@@ -515,14 +518,22 @@ export default {
       font-size: 16px;
 
       &-login {
-        font-weight: 400;
+        font-weight: 600;
       }
       &-profile {
-        font-weight: 600;
+        font-weight: 400;
       }
     }
 
     &_menu a {
+      text-align: left;
+      margin: 0;
+      color: black;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    &_menu p {
       text-align: left;
       margin: 0;
       color: black;
@@ -587,14 +598,22 @@ export default {
                 font-size: 15px;
 
                 &-login {
-                  font-weight: 400;
+                  font-weight: 600;
                 }
                 &-profile {
-                  font-weight: 600;
+                  font-weight: 400;
                 }
               }
 
               &_menu a {
+                text-align: left;
+                margin: 0;
+                color: black;
+                text-decoration: none;
+                cursor: pointer;
+              }
+
+              &_menu p {
                 text-align: left;
                 margin: 0;
                 color: black;

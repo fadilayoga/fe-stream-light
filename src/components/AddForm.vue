@@ -1,5 +1,5 @@
 <template>
-  <form @submit.prevent="" action="">
+  <form @submit.prevent="" enctype="multipart/form-data">
     <fieldset class="lighting-item">
       <div>
         <legend v-if="addformactive" class="lighting-item_form-type">
@@ -11,11 +11,37 @@
           </button>
         </show-at>
       </div>
-      <input type="text" placeholder="name" />
-      <input type="text" placeholder="email" />
-      <input type="password" placeholder="password" />
-      <input type="number" placeholder="umur" min="1" />
-      <select id="level" name="level">
+      <input
+        :class="{ 'form-group--error': $v.name.$error }"
+        v-model.trim="$v.name.$model"
+        type="text"
+        placeholder="name"
+      />
+      <input
+        :class="{ 'form-group--error': $v.email.$error }"
+        v-model.trim="$v.email.$model"
+        type="text"
+        placeholder="email"
+      />
+      <input
+        :class="{ 'form-group--error': $v.password.$error }"
+        v-model.trim="$v.password.$model"
+        type="password"
+        placeholder="password"
+      />
+      <input
+        :class="{ 'form-group--error': $v.age.$error }"
+        v-model.trim="$v.age.$model"
+        type="number"
+        placeholder="umur"
+        min="1"
+      />
+      <select
+        id="role"
+        name="role"
+        :class="{ 'form-group--error': $v.role.$error }"
+        v-model.trim="$v.role.$model"
+      >
         <option value="" disabled selected hidden>Choose Level...</option>
         <option value="superadmin">Superadmin</option>
         <option value="admin">Admin</option>
@@ -24,12 +50,26 @@
         <legend>Gender</legend>
         <div class="lighting-item_gender">
           <label class="lighting-item_gender-type" for="man">
-            <input type="radio" id="man" name="gender" value="Man" />Man
+            <input
+              :class="{ 'form-group--error': $v.gender.$error }"
+              v-model.trim="$v.gender.$model"
+              type="radio"
+              id="man"
+              name="gender"
+              value="Man"
+            />Man
           </label>
         </div>
         <div class="lighting-item_gender">
           <label class="lighting-item_gender-type" for="woman">
-            <input type="radio" id="woman" name="gender" value="Woman" />Woman
+            <input
+              :class="{ 'form-group--error': $v.gender.$error }"
+              v-model.trim="$v.gender.$model"
+              type="radio"
+              id="woman"
+              name="gender"
+              value="Woman"
+            />Woman
           </label>
         </div>
       </fieldset>
@@ -38,6 +78,7 @@
           @change="upload"
           type="file"
           name="file"
+          ref="file"
           id="file"
           class="inputfile"
         />
@@ -50,6 +91,7 @@
               @change="upload"
               type="file"
               name="file"
+              ref="file"
               id="file"
               class="reinputfile"
             />
@@ -103,8 +145,11 @@
 </template>
 
 <script>
+import API_ENDPOINT from "../globals/api-endpoint";
 import { Circle2 } from "vue-loading-spinner";
 import { showAt, hideAt } from "vue-breakpoints";
+import { required, minLength, between } from "vuelidate/lib/validators";
+import axios from "axios";
 export default {
   components: {
     Circle2,
@@ -114,11 +159,17 @@ export default {
   data() {
     return {
       addformactive: true,
-      lightingData: [],
       previewimg: "",
       loading: false,
       editPreviewStatus: false,
       removePreviewStatus: false,
+      name: "",
+      email: "",
+      password: "",
+      age: "",
+      role: "",
+      gender: "",
+      file: "",
     };
   },
   props: {
@@ -126,15 +177,33 @@ export default {
   },
   computed: {},
   methods: {
-    submit() {
+    async submit() {
       this.loading = true;
+
+      const formData = new FormData();
+      formData.append("file", this.file);
+      formData.append("name", this.name);        
+      formData.append("email", this.email);        
+      formData.append("password", this.password);        
+      formData.append("age", this.age);        
+      formData.append("role", this.role);        
+      formData.append("gender", this.gender);     
+
+      try {
+        await axios.post(`${API_ENDPOINT.UPLOAD}`, formData);
+        this.loading = false;
+      } catch (err) {
+        console.log(err);
+        this.loading = false;
+      }
     },
-    upload(e) {
-      this.previewimg = URL.createObjectURL(e.target.files[0]);
-      console.log(this.previewimg);
+    upload() {
+      this.previewimg = URL.createObjectURL(this.$refs.file.files[0]);
+      this.file = this.$refs.file.files[0];
     },
     removephotos() {
       this.previewimg = "";
+      this.file = "";
     },
     closeForm() {
       this.$emit("closeForm");
@@ -152,6 +221,32 @@ export default {
       } else {
         this.removePreviewStatus = false;
       }
+    },
+  },
+  validations: {
+    name: {
+      required,
+      minLength: minLength(4),
+    },
+    email: {
+      required,
+      minLength: minLength(4),
+    },
+    password: {
+      required,
+      minLength: minLength(4),
+    },
+    age: {
+      required,
+      minLength: minLength(4),
+    },
+    role: {
+      required,
+      minLength: minLength(4),
+    },
+    gender: {
+      required,
+      minLength: minLength(4),
     },
   },
 };

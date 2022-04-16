@@ -1,10 +1,13 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import AuthHelper from '../utils/auth-helper'
 import moment from 'moment'
+import axios from 'axios'
+import router from '../router'
+import API_ENDPOINT from "../globals/api-endpoint";
+
+axios.defaults.withCredentials = true;
 
 Vue.use(Vuex)
-Vue.config.devtools = true
 
 export default new Vuex.Store({
   state: {
@@ -20,7 +23,8 @@ export default new Vuex.Store({
     form: {
       addForm: false,
       isFormActive: false
-    }
+    },
+    loggedin: false
   },
   mutations: {
     SOCKET_ONOPEN(state, event) {
@@ -76,16 +80,12 @@ export default new Vuex.Store({
         addForm: state.form.addForm,
         isFormActive: false
       }
+    },
+    AUTH: (state, payload) => {
+      state.loggedin = payload
     }
   },
   actions: {
-    signIn(context, payload) {
-      AuthHelper.signIn(payload)
-      console.log(payload)
-    },
-    signOut() {
-      AuthHelper.signOut()
-    },
     setLighting({
       commit
     }, payload) {
@@ -105,6 +105,34 @@ export default new Vuex.Store({
       commit
     }) {
       commit('CLOSE_FORM')
+    },
+    async auth({ commit }) {
+      try {
+        await axios.get(`${API_ENDPOINT.AUTH}`)
+        commit('AUTH', true)
+      } catch (err) {
+        console.log(err)
+      }
+    }, 
+    async login({ commit }, { email, password }){   
+      try {
+        await axios.post(`${API_ENDPOINT.LOGIN}`, {
+          email: email,
+          password: password,
+        })
+        commit('AUTH', true)
+      } catch (err) {
+        console.log(err)
+      }
+    },
+    async logout({commit}){
+      try {
+        await axios.get(`${API_ENDPOINT.LOGOUT}`)
+        commit('AUTH', false)
+        router.push({ name: 'login' })
+      } catch (err) {
+        console.log(err)
+      }
     }
   },
   getters: {
@@ -130,6 +158,9 @@ export default new Vuex.Store({
     },
     getForm(state) {
       return state.form
+    },
+    getLoginStatus: function (state) {
+      return state.loggedin
     }
   },
   modules: {}

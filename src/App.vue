@@ -1,8 +1,17 @@
 <template>
   <div id="app">
-    <router-view/>
+    <router-view />
   </div>
 </template>
+
+<script>
+// import registrationToken from "./utils/registration-token-helper";
+export default {
+  mounted() {
+    // registrationToken.getToken();
+  },
+};
+</script>
 
 <style lang="scss">
 * {
@@ -17,7 +26,7 @@
 #app {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;  
+  text-align: center;
   height: 100%;
 }
 
