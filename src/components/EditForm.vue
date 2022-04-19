@@ -11,45 +11,159 @@
           </button>
         </show-at>
       </div>
-      <input :value="userdata" type="text" placeholder="name" />
-      <input type="text" placeholder="email" />
-      <input type="password" placeholder="password" />
-      <input type="number" placeholder="umur" min="1" />
-      <select id="level" name="level">
-        <option value="" disabled selected hidden>Choose Level...</option>
-        <option value="superadmin">Superadmin</option>
-        <option value="admin">Admin</option>
-      </select>
-      <fieldset>
-        <legend>Gender</legend>
-        <div class="lighting-item_gender">
-          <label class="lighting-item_gender-type" for="man">
-            <input type="radio" id="man" name="gender" value="Man" />Man
-          </label>
-        </div>
-        <div class="lighting-item_gender">
-          <label class="lighting-item_gender-type" for="woman">
-            <input type="radio" id="woman" name="gender" value="Woman" />Woman
-          </label>
-        </div>
-      </fieldset>
-      <div v-if="!previewimg">
+      <div class="form-group">
         <input
-          @change="upload"
-          type="file"
-          name="file"
-          id="file"
-          class="inputfile"
+          :class="{ 'form-group--error': $v.name.$error }"
+          @input="delayTouch($v.name)"
+          v-model.trim="$v.name.$model"
+          type="text"
+          placeholder="name"
         />
-        <label for="file">Select Photos</label>
+        <div class="error" v-if="$v.name.$error && !$v.name.required">
+          Name is required
+        </div>
+        <div class="error" v-if="$v.name.$error && !$v.name.minLength">
+          Name must have at least {{ $v.name.$params.minLength.min }} letters.
+        </div>
       </div>
-      <div class="photos-preview" v-if="previewimg">
+      <div class="form-group">
+        <input
+          :class="{ 'form-group--error': $v.email.$error }"
+          @input="delayTouch($v.email)"
+          v-model.trim="$v.email.$model"
+          type="text"
+          placeholder="email"
+        />
+        <div class="error" v-if="$v.email.$error && !$v.email.required">
+          Email is required
+        </div>
+        <div class="error" v-if="$v.email.$error && !$v.email.email">
+          Email is not valid
+        </div>
+      </div>
+      <div class="form-group">
+        <input
+          :class="{ 'form-group--error': $v.password.$error }"
+          @input="delayTouch($v.password)"
+          v-model.trim="$v.password.$model"
+          type="password"
+          placeholder="password"
+        />
+        <div class="error" v-if="$v.password.$error && !$v.password.minLength">
+          Password must have at least
+          {{ $v.password.$params.minLength.min }} letters.
+        </div>
+      </div>
+      <div class="form-group">
+        <input
+          :class="{ 'form-group--error': $v.age.$error }"
+          @input="delayTouch($v.age)"
+          v-model.trim="$v.age.$model"
+          type="number"
+          placeholder="umur"
+          min="1"
+        />
+        <div class="error" v-if="$v.age.$error && !$v.age.required">
+          Age is required
+        </div>
+        <div class="error" v-if="$v.age.$error && !$v.age.between">
+          Must be between {{ $v.age.$params.between.min }} and
+          {{ $v.age.$params.between.max }}
+        </div>
+      </div>
+      <div class="form-group">
+        <select
+          :class="{ 'form-group--error': $v.role.$error }"
+          @input="delayTouch($v.role)"
+          v-model.trim="$v.role.$model"
+          id="level"
+          name="level"
+        >
+          <option value="" disabled selected hidden>Choose Level...</option>
+          <option value="superadmin">Superadmin</option>
+          <option value="admin">Admin</option>
+          <option value="none">None</option>
+        </select>
+        <div class="error" v-if="$v.role.$error && !$v.role.required">
+          Role is required
+        </div>
+        <div class="error" v-if="$v.role.$error && !$v.role.validRole">
+          Role does contain invalid value
+        </div>
+      </div>
+      <div class="form-group">
+        <fieldset :class="{ 'form-group--error': $v.gender.$error }">
+          <legend>Gender</legend>
+          <div class="lighting-item_gender">
+            <label class="lighting-item_gender-type" for="man">
+              <input
+                v-model.trim="$v.gender.$model"
+                type="radio"
+                id="man"
+                name="gender"
+                value="man"
+              />Man
+            </label>
+          </div>
+          <div class="lighting-item_gender">
+            <label class="lighting-item_gender-type" for="woman">
+              <input
+                v-model.trim="$v.gender.$model"
+                type="radio"
+                id="woman"
+                name="gender"
+                value="woman"
+              />Woman
+            </label>
+          </div>
+          <div class="lighting-item_gender">
+            <label class="lighting-item_gender-type" for=" none">
+              <input
+                v-model.trim="$v.gender.$model"
+                type="radio"
+                id=" none"
+                name="gender"
+                value=" none"
+              />None
+            </label>
+          </div>
+        </fieldset>
+        <div class="error" v-if="$v.gender.$error && !$v.gender.required">
+          Gender is required
+        </div>
+        <div class="error" v-if="$v.gender.$error && !$v.gender.validGender">
+          Gender does contain invalid value
+        </div>
+      </div>
+      <div class="form-group">
+        <div v-if="!previewimg || $v.file.$invalid">
+          <input
+            @change="upload"
+            type="file"
+            name="file"
+            ref="file"
+            id="file"
+            class="inputfile"
+          />
+          <label :class="{ 'form-group--error': $v.file.$invalid }" for="file"
+            >Select Photos</label
+          >
+        </div>
+        <div class="error" v-if="$v.file.$invalid && !$v.file.validFile">
+          Incorrect file type
+        </div>
+        <div class="error" v-if="$v.file.$invalid && !$v.file.validSize">
+          Max file size is 2MB
+        </div>
+      </div>
+      <div class="photos-preview" v-if="previewimg && !$v.file.$invalid">
         <div class="photos-preview_btn">
           <div>
             <input
               @change="upload"
               type="file"
               name="file"
+              ref="file"
               id="file"
               class="reinputfile"
             />
@@ -92,7 +206,13 @@
             />
           </button>
         </div>
-        <img class="photos-preview_photo" :src="previewimg" alt="" />
+        <img
+          v-if="previewimg"
+          class="photos-preview_photo"
+          :src="previewimg"
+          @error="imageUrlAlt"
+          alt=""
+        />
       </div>
       <button class="lighting-item_submitbtn" @click="submit()" type="submit">
         <span v-if="!loading">Update</span>
@@ -106,62 +226,167 @@
 </template>
 
 <script>
-import { Circle2 } from "vue-loading-spinner";
-import { showAt, hideAt } from "vue-breakpoints";
+import API_ENDPOINT from '../globals/api-endpoint'
+import { Circle2 } from 'vue-loading-spinner'
+import { showAt, hideAt } from 'vue-breakpoints'
+import {
+  required,
+  minLength,
+  between,
+  email,
+  helpers,
+} from 'vuelidate/lib/validators'
+const touchMap = new WeakMap()
+const role = ['superadmin', 'admin']
+const gender = ['woman', 'man']
+const MAX_SIZE = 5 * 1000 * 1000
+const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp']
+const validRole = (value) => role.includes(value)
+const validGender = (value) => gender.includes(value)
+const validFile = (value) => !helpers.req(value) || allowedTypes.includes(value.type)
+const validSize = (value) => !helpers.req(value) || !(value.size > MAX_SIZE)
+const validPassword = (value) => !helpers.req(value) || true
+import axios from 'axios'
 export default {
   components: {
     Circle2,
     showAt,
-    hideAt,
+  },
+  mounted() {
+    if (!this.userdataprops.profilePicture) {
+      this.previewimg = null
+    } else {
+      console.log('ok')
+      this.previewimg = `${API_ENDPOINT.STATIC}/${this.userdataprops.profilePicture}`
+    }
   },
   data() {
     return {
       addformactive: true,
       lightingData: [],
-      previewimg: "",
+      previewimg: null,
       loading: false,
-      userdata: this.userdataprops.payload,
       editPreviewStatus: false,
       removePreviewStatus: false,
-    };
+      id: this.userdataprops._id,
+      name: this.userdataprops.name,
+      email: this.userdataprops.email,
+      password: '',
+      age: this.userdataprops.age,
+      role: this.userdataprops.role,
+      gender: this.userdataprops.gender,
+      file: '',
+    }
   },
-  props: ["userdataprops"],
+  props: ['userdataprops'],
   computed: {},
   methods: {
-    submit() {
-      this.loading = true;
+    async submit() {
+      this.$v.$touch()
+      if (this.$v.$invalid) {
+        console.log('error')
+      } else {
+        this.loading = true
+
+        const formData = new FormData()
+        formData.append('file', this.file)
+        formData.append('name', this.name)
+        formData.append('email', this.email)
+        if (this.password) formData.append('password', this.password)
+        formData.append('age', this.age)
+        formData.append('role', this.role)
+        formData.append('gender', this.gender)
+
+        try {
+          await axios.patch(`${API_ENDPOINT.USERS}/${this.id}`, formData)
+          this.loading = false
+        } catch (err) {
+          console.log(err)
+          this.loading = false
+        }
+      }
     },
     upload(e) {
-      this.previewimg = URL.createObjectURL(e.target.files[0]);
-      console.log(this.previewimg);
+      this.previewimg = URL.createObjectURL(e.target.files[0])
+      this.file = this.$refs.file.files[0]
     },
     removephotos() {
-      this.previewimg = "";
+      this.previewimg = ''
     },
     closeForm() {
-      this.$emit("closeForm");
+      this.$emit('closeForm')
     },
     editicon: function (arg) {
       if (arg) {
-        this.editPreviewStatus = true;
+        this.editPreviewStatus = true
       } else {
-        this.editPreviewStatus = false;
+        this.editPreviewStatus = false
       }
     },
     removeicon: function (arg) {
       if (arg) {
-        this.removePreviewStatus = true;
+        this.removePreviewStatus = true
       } else {
-        this.removePreviewStatus = false;
+        this.removePreviewStatus = false
       }
+    },
+    delayTouch($v) {
+      $v.$reset()
+      if (touchMap.has($v)) {
+        clearTimeout(touchMap.get($v))
+      }
+      touchMap.set($v, setTimeout($v.$touch, 1000))
+    },
+    imageUrlAlt() {
+      this.previewimg = null
+    },
+  },
+  validations: {
+    name: {
+      required,
+      minLength: minLength(4),
+    },
+    email: {
+      required,
+      email,
+    },
+    password: {
+      minLength: minLength(4),
+      validPassword,
+    },
+    age: {
+      required,
+      between: between(10, 100),
+    },
+    role: {
+      required,
+      validRole,
+    },
+    gender: {
+      required,
+      validGender,
+    },
+    file: {
+      validFile,
+      validSize,
     },
   },
   watch: {
     userdataprops: function (newVal, oldVal) {
-      this.userdata = newVal.payload;
+      this.id = newVal._id
+      this.name = newVal.name
+      this.email = newVal.email
+      this.age = newVal.age
+      this.role = newVal.role
+      this.gender = newVal.gender
+      if (newVal.profilePicture != null) {
+        this.previewimg = `${API_ENDPOINT.STATIC}/${newVal.profilePicture}`
+      } else {
+        this.previewimg = newVal.profilePicture
+      }
     },
   },
-};
+}
 </script>
 
 <style lang="scss" scoped>
@@ -169,9 +394,15 @@ export default {
   text-align: left;
   color: #f4f4f5;
 }
+
 form {
   border-radius: 10px;
 }
+
+.error {
+  font-size: 14px;
+}
+
 .container {
   display: grid;
   grid-template-columns: auto 360px;
@@ -212,6 +443,15 @@ form {
   background-color: rgb(250, 250, 250);
   display: inline-block;
   cursor: pointer;
+
+  &.form-group--error {
+    color: red;
+    outline: 2px dashed red;
+    animation-name: shakeError;
+    animation-fill-mode: forwards;
+    animation-duration: 0.6s;
+    animation-timing-function: ease-in-out;
+  }
 }
 
 .reinputfile + label {
@@ -259,6 +499,76 @@ form {
 
       &:focus {
         outline: none;
+      }
+    }
+
+    & .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+
+      &--error {
+        outline: 1px solid red;
+        animation-name: shakeError;
+        animation-fill-mode: forwards;
+        animation-duration: 0.6s;
+        animation-timing-function: ease-in-out;
+
+        &:focus {
+          outline: 1px solid red;
+        }
+      }
+    }
+
+    & select {
+      outline: none;
+
+      &.form-group--error {
+        outline: 1px solid red;
+        animation-name: shakeError;
+        animation-fill-mode: forwards;
+        animation-duration: 0.6s;
+        animation-timing-function: ease-in-out;
+
+        &:focus {
+          outline: 1px solid red;
+        }
+      }
+    }
+
+    & fieldset.form-group--error {
+      border-color: red;
+      outline: none;
+      animation-name: shakeError;
+      animation-fill-mode: forwards;
+      animation-duration: 0.6s;
+      animation-timing-function: ease-in-out;
+    }
+
+    @keyframes shakeError {
+      0% {
+        transform: translateX(0);
+      }
+      15% {
+        transform: translateX(0.375rem);
+      }
+      30% {
+        transform: translateX(-0.375rem);
+      }
+      45% {
+        transform: translateX(0.375rem);
+      }
+      60% {
+        transform: translateX(-0.375rem);
+      }
+      75% {
+        transform: translateX(0.375rem);
+      }
+      90% {
+        transform: translateX(-0.375rem);
+      }
+      100% {
+        transform: translateX(0);
       }
     }
 
@@ -340,6 +650,10 @@ form {
     box-sizing: border-box;
     height: 100%;
     gap: 20px;
+  }
+
+  .error {
+    font-size: 13px;
   }
 
   .inputfile {

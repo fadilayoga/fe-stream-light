@@ -7,8 +7,9 @@ const API_ENDPOINT = {
   LOGIN: `${CONFIG.BASE_URL}auth/login`,
   AUTH: `${CONFIG.BASE_URL}auth/authenticate`,
   LOGOUT: `${CONFIG.BASE_URL}auth/logout`,
-  LOCATION: `${CONFIG.BASE_URL}location`,
-  UPLOAD: `${CONFIG.BASE_URL}upload`,
+  LOCATION: `${CONFIG.BASE_URL}location`,  
+  USERS: `${CONFIG.BASE_URL}users`,
+  STATIC: `${CONFIG.BASE_URL}static`,
 };
 
 export default API_ENDPOINT;

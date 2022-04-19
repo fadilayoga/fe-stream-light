@@ -25,23 +25,35 @@
         </div>
       </hide-at>
       <div class="problem-item-group">
-        <div v-for="(item, index) in 10" :key="item" class="problem-item">
+        <div
+          v-for="(item, index) in users"
+          :key="item._id"
+          class="problem-item"
+        >
           <img
+            v-if="item.profilePicture"
+            class="problem-item_userphoto"
+            :src="imgUrl(item.profilePicture)"
+            @error="imageUrlAlt"
+            alt=""
+          />
+          <img
+            v-else
             class="problem-item_userphoto"
             src="~@/assets/images/lofi_generator.png"
             alt=""
           />
           <div class="problem-item_detail">
-            <p class="problem-item_detail-lighting">Lighting-0{{ index }}</p>
-            <p class="problem-item_detail-timestamp">10/12/2022</p>
+            <p class="problem-item_detail-lighting">{{ item.name }}</p>
+            <p class="problem-item_detail-timestamp">{{ item.role }}</p>
           </div>
           <div class="problem-item_action">
             <remove-button></remove-button>
             <show-at breakpoint="small">
-              <edit-button @updatedata="updateuser(index, true)"></edit-button>
+              <edit-button @updatedata="updateuser(item, true)"></edit-button>
             </show-at>
             <hide-at breakpoint="small">
-              <edit-button @updatedata="updateuser(index, false)"></edit-button>
+              <edit-button @updatedata="updateuser(item, false)"></edit-button>
             </hide-at>
           </div>
         </div>
@@ -71,12 +83,14 @@
 </template>
 
 <script>
-import AddForm from "../components/AddForm.vue";
-import EditForm from "../components/EditForm.vue";
-import EditButton from "../components/EditButton.vue";
-import RemoveButton from "../components/RemoveButton.vue";
-import { showAt, hideAt } from "vue-breakpoints";
-import { mapGetters } from "vuex";
+import API_ENDPOINT from '../globals/api-endpoint'
+import AddForm from '../components/AddForm.vue'
+import EditForm from '../components/EditForm.vue'
+import EditButton from '../components/EditButton.vue'
+import RemoveButton from '../components/RemoveButton.vue'
+import { showAt, hideAt } from 'vue-breakpoints'
+import { mapGetters } from 'vuex'
+import axios from 'axios'
 export default {
   components: {
     AddForm,
@@ -88,53 +102,67 @@ export default {
   },
   data() {
     return {
-      lightingData: [],
-      previewimg: "",
+      users: [],
+      previewimg: null,
       loading: false,
       userdata: {},
       isAddFormActive: true,
       isFormActive: false,
-    };
+    }
   },
   props: {
     lighting: Array,
   },
+  mounted: async function () {
+    try {
+      const result = await axios.get(`${API_ENDPOINT.USERS}`)
+      this.users = result.data
+    } catch (err) {
+      console.log(err)
+    }
+  },
   computed: {
-    ...mapGetters(["getForm"]),
+    ...mapGetters(['getForm']),
   },
   methods: {
     submit: function () {
-      this.loading = true;
+      this.loading = true
     },
     upload: function (e) {
-      this.previewimg = URL.createObjectURL(e.target.files[0]);
-      console.log(this.previewimg);
+      this.previewimg = URL.createObjectURL(e.target.files[0])
+      console.log(this.previewimg)
     },
     removephotos: function () {
-      this.previewimg = "";
+      this.previewimg = null
     },
     adduser: function () {
-      this.$store.dispatch("addForm");
+      this.$store.dispatch('addForm')
     },
     updateuser: function (payload, mobile) {
       if (mobile) {
-        document.body.classList.add("modal-open");
+        document.body.classList.add('modal-open')
       }
-      this.$store.dispatch("updateForm");
-      this.userdata = { payload };
+      this.$store.dispatch('updateForm')
+      this.userdata = payload
     },
     closeForm: function () {
-      this.$store.dispatch("closeForm");
-      document.body.classList.remove("modal-open");
+      this.$store.dispatch('closeForm')
+      document.body.classList.remove('modal-open')
+    },
+    imgUrl: function (filename) {
+      return `${API_ENDPOINT.STATIC}/${filename}`
+    },
+    imageUrlAlt(event) {
+      event.target.src = require('@/assets/images/lofi_generator.png')
     },
   },
   watch: {
     getForm(newValue, oldValue) {
-      this.isAddFormActive = newValue.addForm;
-      this.isFormActive = newValue.isFormActive;
+      this.isAddFormActive = newValue.addForm
+      this.isFormActive = newValue.isFormActive
     },
   },
-};
+}
 </script>
 
 <style lang="scss" scoped>
@@ -220,7 +248,7 @@ export default {
     }
 
     &_userphoto {
-      max-width: 50px;
+      width: 50px;
       height: 50px;
       border-radius: 5px;
       object-fit: cover;
@@ -323,7 +351,7 @@ export default {
       }
 
       &_userphoto {
-        max-width: 45px;
+        width: 45px;
         height: 45px;
       }
 
