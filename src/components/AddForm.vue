@@ -296,7 +296,6 @@ export default {
     upload() {
       this.previewimg = URL.createObjectURL(this.$refs.file.files[0])
       this.file = this.$refs.file.files[0]
-      console.log(this.file)
     },
     removephotos() {
       this.previewimg = ''
@@ -330,7 +329,7 @@ export default {
   validations: {
     name: {
       required,
-      minLength: minLength(4),
+      minLength: minLength(5),
     },
     email: {
       required,
@@ -338,7 +337,7 @@ export default {
     },
     password: {
       required,
-      minLength: minLength(4),
+      minLength: minLength(5),
     },
     age: {
       required,

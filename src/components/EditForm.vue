@@ -243,10 +243,12 @@ const MAX_SIZE = 5 * 1000 * 1000
 const allowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'image/webp']
 const validRole = (value) => role.includes(value)
 const validGender = (value) => gender.includes(value)
-const validFile = (value) => !helpers.req(value) || allowedTypes.includes(value.type)
+const validFile = (value) =>
+  !helpers.req(value) || allowedTypes.includes(value.type)
 const validSize = (value) => !helpers.req(value) || !(value.size > MAX_SIZE)
 const validPassword = (value) => !helpers.req(value) || true
 import axios from 'axios'
+import Swal from 'sweetalert2'
 export default {
   components: {
     Circle2,
@@ -311,7 +313,26 @@ export default {
       this.file = this.$refs.file.files[0]
     },
     removephotos() {
-      this.previewimg = ''
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!',
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          try {
+            await axios.delete(`${API_ENDPOINT.PICTURE}/${this.id}`)
+            this.previewimg = ''
+            this.file = ''
+            Swal.fire("Deleted!", "Your profile picture has been deleted.", "success");
+          } catch (err) {
+            Swal.fire('Oh no', 'Failed deleted File', 'warning')
+          }
+        }
+      })
     },
     closeForm() {
       this.$emit('closeForm')
@@ -344,14 +365,14 @@ export default {
   validations: {
     name: {
       required,
-      minLength: minLength(4),
+      minLength: minLength(5),
     },
     email: {
       required,
       email,
     },
     password: {
-      minLength: minLength(4),
+      minLength: minLength(5),
       validPassword,
     },
     age: {
