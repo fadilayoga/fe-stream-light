@@ -285,12 +285,9 @@ export default {
         formData.append('gender', this.gender)
 
         try {
-          await axios.post(`${API_ENDPOINT.USERS}`, formData)
-          this.$store.dispatch('closeForm')
-          if (this.$device.mobile) {
-            document.body.classList.remove('modal-open')
-          }
-          this.loading = false
+          const result = await axios.post(`${API_ENDPOINT.USERS}`, formData)
+          this.$emit('reRender', result.data)
+          this.resetForm()
         } catch (err) {
           console.log(err)
           this.loading = false
@@ -328,6 +325,13 @@ export default {
         clearTimeout(touchMap.get($v))
       }
       touchMap.set($v, setTimeout($v.$touch, 1000))
+    },
+    resetForm() {
+      this.$store.dispatch('closeForm')
+      if (this.$device.mobile) {
+        document.body.classList.remove('modal-open')
+      }
+      this.loading = false
     },
   },
   validations: {

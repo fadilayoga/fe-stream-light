@@ -47,8 +47,8 @@ export default {
         this.removeiconstatus = false
       }
     },
-    removeUser: function () {
-      Swal.fire({
+    async removeUser() {
+      const swal1 = await Swal.fire({
         title: 'Are you sure?',
         text: "You won't be able to revert this!",
         icon: 'warning',
@@ -56,16 +56,22 @@ export default {
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
         confirmButtonText: 'Yes, delete it!',
-      }).then(async (result) => {
-        if (result.isConfirmed) {
-          try {
-            await axios.delete(`${API_ENDPOINT.USERS}/${this.id}`)
-            Swal.fire('Deleted!', 'This user has been deleted.', 'success')
-          } catch (err) {
-            Swal.fire('Oh no', 'Failed deleted File', 'warning')
-          }          
-        }
       })
+      if (swal1.isConfirmed) {
+        try {
+          await axios.delete(`${API_ENDPOINT.USERS}/${this.id}`)
+          const swal2 = await Swal.fire(
+            'Deleted!',
+            'This user has been deleted.',
+            'success'
+          )
+          if (swal2.isConfirmed) {
+            this.$emit('reRender', this.id)
+          }
+        } catch (err) {
+          Swal.fire('Oh no', 'Failed deleted File', 'warning')
+        }
+      }
     },
   },
 }

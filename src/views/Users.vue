@@ -2,10 +2,11 @@
   <div class="container">
     <hide-at breakpoint="small">
       <div>
-        <add-form v-if="isAddFormActive"></add-form>
+        <add-form v-if="isAddFormActive" @reRender="renderUpdate"></add-form>
         <edit-form
           :userdataprops="userdata"
           v-if="!isAddFormActive"
+          @reRender="renderUpdate"
         ></edit-form>
       </div>
     </hide-at>
@@ -27,7 +28,7 @@
       <div class="problem-item-group">
         <div
           v-for="(item, index) in users"
-          :key="item._id"
+          :key="uniqueKey(item, index)"
           class="problem-item"
         >
           <img
@@ -48,7 +49,10 @@
             <p class="problem-item_detail-timestamp">{{ item.role }}</p>
           </div>
           <div class="problem-item_action">
-            <remove-button :userdataprops="item"></remove-button>
+            <remove-button
+              :userdataprops="item"
+              @reRender="renderRemove"
+            ></remove-button>
             <edit-button @updatedata="updateuser(item)"></edit-button>
           </div>
         </div>
@@ -64,12 +68,14 @@
             class="modal"
             v-if="isFormActive && isAddFormActive"
             @closeForm="closeForm"
+            @reRender="renderUpdate"
           ></add-form>
           <edit-form
             class="modal"
             :userdataprops="userdata"
             v-if="isFormActive && !isAddFormActive"
             @closeForm="closeForm"
+            @reRender="renderUpdate"
           ></edit-form>
         </transition>
       </div>
@@ -149,6 +155,18 @@ export default {
     },
     imageUrlAlt(event) {
       event.target.src = require('@/assets/images/lofi_generator.png')
+    },
+    renderRemove(payload) {
+      const findIndex = this.users.findIndex((user) => user._id == payload)
+      this.$delete(this.users, findIndex)
+    },
+    renderUpdate(payload) {
+      const findIndex = this.users.findIndex((user) => user._id == payload._id)
+      this.$set(this.users, findIndex, payload)
+    },
+    uniqueKey(payload, index) {
+      let key = `${payload._id + '_' + index}`
+      return key
     },
   },
   watch: {

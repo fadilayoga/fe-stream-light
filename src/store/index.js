@@ -77,7 +77,7 @@ export default new Vuex.Store({
     },
     CLOSE_FORM(state, payload) {
       state.form = {
-        addForm: state.form.addForm,
+        addForm: true,
         isFormActive: false
       }
     },

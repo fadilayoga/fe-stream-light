@@ -258,7 +258,6 @@ export default {
     if (!this.userdataprops.profilePicture) {
       this.previewimg = null
     } else {
-      console.log('ok')
       this.previewimg = `${API_ENDPOINT.STATIC}/${this.userdataprops.profilePicture}`
     }
   },
@@ -300,12 +299,9 @@ export default {
         formData.append('gender', this.gender)
 
         try {
-          await axios.patch(`${API_ENDPOINT.USERS}/${this.id}`, formData)
-          this.$store.dispatch('closeForm')
-          if (this.$device.mobile) {
-            document.body.classList.remove('modal-open')
-          }
-          this.loading = false
+          const result = await axios.patch(`${API_ENDPOINT.USERS}/${this.id}`, formData)
+          this.$emit('reRender', result.data)
+          this.resetForm()
         } catch (err) {
           console.log(err)
           this.loading = false
@@ -316,8 +312,8 @@ export default {
       this.previewimg = URL.createObjectURL(e.target.files[0])
       this.file = this.$refs.file.files[0]
     },
-    removephotos() {
-      Swal.fire({
+    async removephotos() {
+      const swal1 = await Swal.fire({
         title: 'Are you sure?',
         text: "You won't be able to revert this!",
         icon: 'warning',
@@ -325,30 +321,26 @@ export default {
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
         confirmButtonText: 'Yes, delete it!',
-      }).then(async (result) => {
-        if (result.isConfirmed) {
-          try {
-            await axios.delete(`${API_ENDPOINT.PICTURE}/${this.id}`)
+      })
+      if (swal1.isConfirmed) {
+        try {
+          const result = await axios.delete(
+            `${API_ENDPOINT.PICTURE}/${this.id}`
+          )
+          const swal2 = await Swal.fire(
+            'Deleted!',
+            'Your profile picture has been deleted.',
+            'success'
+          )
+          if (swal2.isConfirmed) {
             this.previewimg = ''
             this.file = ''
-            Swal.fire(
-              'Deleted!',
-              'Your profile picture has been deleted.',
-              'success'
-            ).then((result) => {
-              if (result.isConfirmed) {
-                this.$store.dispatch('closeForm')
-                if (this.$device.mobile) {
-                  document.body.classList.remove('modal-open')
-                }
-                this.loading = false
-              }
-            })
-          } catch (err) {
-            Swal.fire('Oh no', 'Failed deleted File', 'warning')
+            this.$emit('reRender', result.data)
           }
+        } catch (err) {
+          Swal.fire('Oh no', 'Failed deleted File', 'warning')
         }
-      })
+      }
     },
     closeForm() {
       this.$emit('closeForm')
@@ -376,6 +368,13 @@ export default {
     },
     imageUrlAlt() {
       this.previewimg = null
+    },
+    resetForm() {
+      this.$store.dispatch('closeForm')
+      if (this.$device.mobile) {
+        document.body.classList.remove('modal-open')
+      }
+      this.loading = false
     },
   },
   validations: {
