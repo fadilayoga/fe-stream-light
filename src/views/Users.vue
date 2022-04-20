@@ -48,13 +48,8 @@
             <p class="problem-item_detail-timestamp">{{ item.role }}</p>
           </div>
           <div class="problem-item_action">
-            <remove-button></remove-button>
-            <show-at breakpoint="small">
-              <edit-button @updatedata="updateuser(item, true)"></edit-button>
-            </show-at>
-            <hide-at breakpoint="small">
-              <edit-button @updatedata="updateuser(item, false)"></edit-button>
-            </hide-at>
+            <remove-button :userdataprops="item"></remove-button>
+            <edit-button @updatedata="updateuser(item)"></edit-button>
           </div>
         </div>
       </div>
@@ -138,8 +133,8 @@ export default {
     adduser: function () {
       this.$store.dispatch('addForm')
     },
-    updateuser: function (payload, mobile) {
-      if (mobile) {
+    updateuser: function (payload) {
+      if (this.$device.mobile) {
         document.body.classList.add('modal-open')
       }
       this.$store.dispatch('updateForm')

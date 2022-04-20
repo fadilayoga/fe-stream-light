@@ -32,14 +32,21 @@
         src="~@/assets/images/lofi_generator.png"
         alt=""
       />
-      <h2 class="grid-two_email">@fadilakharismayoga@gmail.com</h2>
-      <p class="grid-two_name">Fadila Kharisma Yoga</p>
+      <h2 class="grid-two_email">{{ user.email }}</h2>
+      <p class="grid-two_name">{{ user.name }}</p>
       <img
+        v-if="user.gender === 'man'"
         class="grid-two_gender"
-        src="~@/assets/images/icons/user-outline-black.svg"
+        src="~@/assets/images/male_icon.svg"
         alt=""
       />
-      <h2 class="grid-two_role">AdmiN</h2>
+      <img
+        v-else
+        class="grid-two_gender"
+        src="~@/assets/images/female_icon.svg"
+        alt=""
+      />
+      <h2 class="grid-two_role">{{ user.role }}</h2>
     </div>
     <show-at breakpoint="small">
       <div class="nav">
@@ -137,31 +144,40 @@
 </template>
 
 <script>
-import { showAt, hideAt } from "vue-breakpoints";
+import API_ENDPOINT from '../globals/api-endpoint'
+import { showAt, hideAt } from 'vue-breakpoints'
 import { mapActions } from 'vuex'
+import axios from 'axios'
 export default {
   components: { hideAt, showAt },
   data() {
     return {
       profileMenu: false,
-    };
+      user: {},
+    }
   },
-  mounted: function () {
-    document.body.style.backgroundColor = "#2a2e59";
+  mounted: async function () {
+    document.body.style.backgroundColor = '#2a2e59'
+    try {
+      const result = await axios.get(`${API_ENDPOINT.AUTH}`)
+      this.user = result.data
+    } catch (err) {
+      console.log(err)
+    }
   },
   destroyed: function () {
-    document.body.style.backgroundColor = null;
+    document.body.style.backgroundColor = null
   },
   methods: {
     ...mapActions(['logout']),
     openDialog() {
-      this.profileMenu = true;
+      this.profileMenu = true
     },
     closeDialog() {
-      this.profileMenu = false;
+      this.profileMenu = false
     },
   },
-};
+}
 </script>
 
 <style lang="scss" scoped>

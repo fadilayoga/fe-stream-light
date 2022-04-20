@@ -11,7 +11,7 @@
           <!-- <th>Fixed Date</th> -->
           <th class="ta-center">Location</th>
         </tr>
-        <tr v-for="(data, index) in logs.results" :key="data._id">
+        <tr v-for="(data, index) in logs" :key="data._id">
           <td class="ta-center">{{ (pages - 1) * limit + (index + 1) }}</td>
           <td>Magazzini Alimentari Riuniti</td>
           <td>12/10/2021</td>
@@ -95,8 +95,8 @@ export default {
         .then((response) => {
           this.pages = page;
           this.total_pages = response.data.total_pages;
-          this.next = response.data.next || {};
-          this.previous = response.data.previous || {};
+          this.next = response.data.next ? response.data.next : null;
+          this.previous = response.data.previous ? response.data.previous : null;
           this.logs = response.data.results;
         })
         .catch(function (error) {

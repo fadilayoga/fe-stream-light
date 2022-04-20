@@ -291,7 +291,7 @@ export default {
         this.loading = true
 
         const formData = new FormData()
-        formData.append('file', this.file)
+        if (this.file) formData.append('file', this.file)
         formData.append('name', this.name)
         formData.append('email', this.email)
         if (this.password) formData.append('password', this.password)
@@ -301,6 +301,10 @@ export default {
 
         try {
           await axios.patch(`${API_ENDPOINT.USERS}/${this.id}`, formData)
+          this.$store.dispatch('closeForm')
+          if (this.$device.mobile) {
+            document.body.classList.remove('modal-open')
+          }
           this.loading = false
         } catch (err) {
           console.log(err)
@@ -327,7 +331,19 @@ export default {
             await axios.delete(`${API_ENDPOINT.PICTURE}/${this.id}`)
             this.previewimg = ''
             this.file = ''
-            Swal.fire("Deleted!", "Your profile picture has been deleted.", "success");
+            Swal.fire(
+              'Deleted!',
+              'Your profile picture has been deleted.',
+              'success'
+            ).then((result) => {
+              if (result.isConfirmed) {
+                this.$store.dispatch('closeForm')
+                if (this.$device.mobile) {
+                  document.body.classList.remove('modal-open')
+                }
+                this.loading = false
+              }
+            })
           } catch (err) {
             Swal.fire('Oh no', 'Failed deleted File', 'warning')
           }

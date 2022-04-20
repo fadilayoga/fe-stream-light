@@ -286,6 +286,10 @@ export default {
 
         try {
           await axios.post(`${API_ENDPOINT.USERS}`, formData)
+          this.$store.dispatch('closeForm')
+          if (this.$device.mobile) {
+            document.body.classList.remove('modal-open')
+          }
           this.loading = false
         } catch (err) {
           console.log(err)

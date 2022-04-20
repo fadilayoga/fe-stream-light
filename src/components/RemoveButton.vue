@@ -28,37 +28,45 @@ button {
 </style>
 
 <script>
-import Swal from "sweetalert2";
+import API_ENDPOINT from '../globals/api-endpoint'
+import Swal from 'sweetalert2'
+import axios from 'axios'
 export default {
   data() {
     return {
+      id: this.userdataprops._id,
       removeiconstatus: false,
-    };
+    }
   },
+  props: ['userdataprops'],
   methods: {
     removeicon: function (arg) {
       if (arg) {
-        this.removeiconstatus = true;
+        this.removeiconstatus = true
       } else {
-        this.removeiconstatus = false;
+        this.removeiconstatus = false
       }
     },
     removeUser: function () {
       Swal.fire({
-        title: "Are you sure?",
+        title: 'Are you sure?',
         text: "You won't be able to revert this!",
-        icon: "warning",
+        icon: 'warning',
         showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Yes, delete it!",
-      }).then((result) => {
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!',
+      }).then(async (result) => {
         if (result.isConfirmed) {
-          Swal.fire("Deleted!", "Your file has been deleted.", "success");
+          try {
+            await axios.delete(`${API_ENDPOINT.USERS}/${this.id}`)
+            Swal.fire('Deleted!', 'This user has been deleted.', 'success')
+          } catch (err) {
+            Swal.fire('Oh no', 'Failed deleted File', 'warning')
+          }          
         }
-      });
+      })
     },
   },
-};
+}
 </script>
-
