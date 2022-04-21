@@ -3,18 +3,15 @@ import Vuex from 'vuex'
 import moment from 'moment'
 import axios from 'axios'
 import router from '../router'
-import API_ENDPOINT from "../globals/api-endpoint";
+import API_ENDPOINT from '../globals/api-endpoint'
 
-axios.defaults.withCredentials = true;
+axios.defaults.withCredentials = true
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    allLighting: {
-      lighting: [],
-      lightingLog: [],
-    },
+    allLighting: [],
     socket: {
       isConnected: false,
       ldr: [],
@@ -22,9 +19,9 @@ export default new Vuex.Store({
     },
     form: {
       addForm: false,
-      isFormActive: false
+      isFormActive: false,
     },
-    loggedin: false
+    loggedin: false,
   },
   mutations: {
     SOCKET_ONOPEN(state, event) {
@@ -38,21 +35,15 @@ export default new Vuex.Store({
       console.error(state, event)
     },
     // default handler called for all methods
-    SOCKET_ONMESSAGE(state, message) {
-      // state.socket.message = message.message
-      let lighting = message.message.lighting
-      let lightingLog = message.message.lightingLog
-      state.allLighting = {
-        lighting: lighting,
-        lightingLog: lightingLog
-      }
+    SOCKET_ONMESSAGE(state, message) {      
+      state.allLighting = message      
     },
     // mutations for reconnect methods
     SOCKET_RECONNECT(state, count) {
       console.info(state, count)
     },
     SOCKET_RECONNECT_ERROR(state) {
-      state.socket.reconnectError = true;
+      state.socket.reconnectError = true
     },
     LIGHTING(state, payload) {
       state.allLighting = payload
@@ -60,44 +51,36 @@ export default new Vuex.Store({
     ADD_FORM(state, payload) {
       state.form = {
         addForm: true,
-        isFormActive: true
+        isFormActive: true,
       }
     },
     UPDATE_FORM(state, payload) {
       state.form = {
         addForm: false,
-        isFormActive: true
+        isFormActive: true,
       }
     },
     CLOSE_FORM(state, payload) {
       state.form = {
         addForm: true,
-        isFormActive: false
+        isFormActive: false,
       }
     },
     AUTH: (state, payload) => {
       state.loggedin = payload
-    }
+    },
   },
   actions: {
-    setLighting({
-      commit
-    }, payload) {
+    setLighting({ commit }, payload) {
       commit('LIGHTING', payload.payload)
     },
-    addForm({
-      commit
-    }) {
+    addForm({ commit }) {
       commit('ADD_FORM')
     },
-    updateForm({
-      commit
-    }) {
+    updateForm({ commit }) {
       commit('UPDATE_FORM')
     },
-    closeForm({
-      commit
-    }) {
+    closeForm({ commit }) {
       commit('CLOSE_FORM')
     },
     async auth({ commit }) {
@@ -107,8 +90,8 @@ export default new Vuex.Store({
       } catch (err) {
         console.log(err)
       }
-    }, 
-    async login({ commit }, { email, password }){   
+    },
+    async login({ commit }, { email, password }) {
       try {
         await axios.post(`${API_ENDPOINT.LOGIN}`, {
           email: email,
@@ -119,7 +102,7 @@ export default new Vuex.Store({
         console.log(err)
       }
     },
-    async logout({commit}){
+    async logout({ commit }) {
       try {
         await axios.get(`${API_ENDPOINT.LOGOUT}`)
         commit('AUTH', false)
@@ -127,27 +110,18 @@ export default new Vuex.Store({
       } catch (err) {
         console.log(err)
       }
-    }
+    },
   },
   getters: {
     getAllLighting(state) {
-      return state.allLighting.lighting
+      return state.allLighting
     },
     getLightingLog: (state, getters) => (id) => {
-      let chartData = state.allLighting.lightingLog.filter(data => data.lighting._id == id)
-      let labels = []
-      let data = []
-      for (let item of chartData) {
-        labels.push(getters.getTime(item.timestamp))
-        data.push(item.ldr)
-      }
-      return {
-        labels,
-        data
-      }
+      let chartData = state.allLighting.filter((data) => data._id == id)      
+      return chartData[0]
     },
     getTime: (state) => (pastTime) => {
-      let now = moment(pastTime).format('DMYY:Hms');
+      let now = moment(pastTime).format('H:m:s')
       return now
     },
     getForm(state) {
@@ -155,7 +129,7 @@ export default new Vuex.Store({
     },
     getLoginStatus: function (state) {
       return state.loggedin
-    }
+    },
   },
-  modules: {}
+  modules: {},
 })

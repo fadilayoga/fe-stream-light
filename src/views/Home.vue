@@ -211,7 +211,12 @@
                 class="grid_mobile-grid-one-navbar-dropdown_menu-profile"
                 >Profile</router-link
               >
-              <p @click="logout" class="grid_mobile-grid-one-navbar-dropdown_menu-login">Logout</p>
+              <p
+                @click="logout"
+                class="grid_mobile-grid-one-navbar-dropdown_menu-login"
+              >
+                Logout
+              </p>
             </div>
           </div>
         </div>
@@ -328,52 +333,51 @@
 </template>
 
 <script>
-import { showAt, hideAt } from "vue-breakpoints";
+import { showAt, hideAt } from 'vue-breakpoints'
 import { mapActions } from 'vuex'
 export default {
-  name: "Home",
+  name: 'Home',
   components: { hideAt, showAt },
   mounted: function () {
-    document.body.style.backgroundColor = "#2a2e59";
+    document.body.style.backgroundColor = '#2a2e59'
   },
   destroyed: function () {
-    document.body.style.backgroundColor = null;
+    document.body.style.backgroundColor = null
   },
   data() {
     return {
       profileMenu: false,
-    };
+    }
   },
   computed: {
     getPath() {
-      let path = this.$route.path;
-      if (path === "/") return "Dashboard";
-      let stringSplit = path.split("/")[1];
-      let upperCase =
-        stringSplit.charAt(0).toUpperCase() + stringSplit.slice(1);
-      return upperCase;
+      let path = this.$route.path
+      if (path === '/') return 'Dashboard'
+      let stringSplit = path.split('/')[1]
+      let upperCase = stringSplit.charAt(0).toUpperCase() + stringSplit.slice(1)
+      return upperCase
     },
     addAccessButton() {
-      if (this.$route.name === "users") {
-        return true;
+      if (this.$route.name === 'users') {
+        return true
       }
-      return false;
+      return false
     },
   },
   methods: {
     ...mapActions(['logout']),
     openDialog() {
-      this.profileMenu = true;
+      this.profileMenu = true
     },
     closeDialog() {
-      this.profileMenu = false;
+      this.profileMenu = false
     },
     openAddForm() {
-      this.$store.dispatch("addForm");
-      document.body.classList.add("modal-open");
+      this.$store.dispatch('addForm')
+      document.body.classList.add('modal-open')
     },
   },
-};
+}
 </script>
 
 <style lang="scss" scoped>
@@ -545,9 +549,6 @@ export default {
 
 //----------mobile-------------
 @media screen and (max-width: 768px) {
-  .dekstop-viewport {
-    display: none;
-  }
   .grid {
     &_mobile {
       margin: 0;

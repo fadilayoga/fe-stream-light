@@ -4,8 +4,6 @@
       <main-chart
         v-for="item in getAllLighting"
         :key="item._id"
-        :_id="item._id"
-        :name="item.name"
         :chart="getChartData(item._id)"
       />
     </div>
@@ -58,16 +56,15 @@ export default {
     getKey(_id) {
       return `${_id}.${new Date().getTime()}`;
     },
-    getChartData(_id) {
-      let chartData = this.$store.getters.getLightingLog(_id);
+    getChartData(_id) {      
+      let chartData = this.$store.getters.getLightingLog(_id);         
       return chartData;
     },
     getAllData() {
       axios
         .get(`${API_ENDPOINT.LIGHTING_ALL}`)
-        .then((response) => {
-          let { lighting, lightingLog } = response.data
-          this.setData({ lighting, lightingLog })
+        .then((response) => {          
+          this.setData(response.data)          
         })
         .catch(function (error) {
           console.log(error);
@@ -90,6 +87,7 @@ export default {
   grid-template-rows: auto;
   box-sizing: border-box;
   height: 100%;
+  width: 100%;
   gap: 20px;
 }
 

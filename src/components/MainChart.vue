@@ -1,6 +1,6 @@
 <template>
   <div class="lighting">
-    <p class="lighting-name">{{ name }}</p>
+    <p class="lighting-name">{{ chartName }}</p>
     <line-chart
       :height="150"
       :options="options"
@@ -10,25 +10,24 @@
 </template>
 
 <script>
-import LineChart from "@/components/LineChart.vue";
-import { mapGetters } from "vuex";
+import LineChart from '@/components/LineChart.vue'
+import { mapGetters } from 'vuex'
 
 export default {
   components: {
     LineChart,
   },
   props: {
-    _id: String,
-    name: String,
     chart: Object,
   },
   data() {
     return {
-      nameChart: "",
+      chartId: this.chart.result[0]._id,
+      chartName: this.chart.result[0].name,
       datacollection: {},
       options: {
         responsive: true,
-        maintainAspectRatio: false,
+        maintainAspectRatio: true,
         scales: {
           yAxes: [
             {
@@ -39,10 +38,12 @@ export default {
           ],
         },
       },
-    };
+    }
   },
   mounted() {
-    this.fillData(this.chart);
+    const labels = this.chart.logs.map(({ timestamp }) => this.getTime(timestamp))
+    const data = this.chart.logs.map(({ ldr }) => ldr)
+    this.fillData({ labels, data })
   },
   methods: {
     fillData({ labels, data }) {
@@ -50,27 +51,32 @@ export default {
         labels: labels,
         datasets: [
           {
-            label: "Data One",
-            backgroundColor: "#f87979",
+            label: 'Data One',
+            backgroundColor: '#f87979',
             borderColor: 'white',
             pointBorderColor: 'black',
             pointBackgroundColor: 'coral',
             data: data,
           },
         ],
-      };
+      }
     },
-    splitChartData() {},
+    onUpdateChart(newChartData) {
+      const labels = newChartData.logs.map(({ timestamp }) => this.getTime(timestamp))
+      const data = newChartData.logs.map(({ ldr }) => ldr)
+      this.fillData({ labels, data })
+    },
   },
   computed: {
-    ...mapGetters(["getAllLighting","getLightingLog"]),
+    ...mapGetters(['getAllLighting', 'getLightingLog', 'getTime']),
   },
   watch: {
     getAllLighting(newValue, oldValue) {
-      this.fillData(this.getLightingLog(this._id));
+      const data = this.getLightingLog(this.chartId)
+      this.onUpdateChart(data)
     },
   },
-};
+}
 </script>
 
 <style lang="scss">
