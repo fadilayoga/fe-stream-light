@@ -58,7 +58,7 @@
           </template>
         </template>
         <div
-          v-if="pages !== total_pages"
+          v-if="pages !== total_pages && total_pages != 0"
           @click="getDataPage(next)"
           class="pagination-item"
         >

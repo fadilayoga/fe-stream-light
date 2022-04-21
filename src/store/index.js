@@ -40,14 +40,8 @@ export default new Vuex.Store({
     // default handler called for all methods
     SOCKET_ONMESSAGE(state, message) {
       // state.socket.message = message.message
-      let lighting = []
-      let lightingLog = []
-      for (let data of message.message.lightingLog) {
-        lightingLog.push(data)
-      }
-      for (let data of message.message.lighting) {
-        lighting.push(data)
-      }
+      let lighting = message.message.lighting
+      let lightingLog = message.message.lightingLog
       state.allLighting = {
         lighting: lighting,
         lightingLog: lightingLog
