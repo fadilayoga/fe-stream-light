@@ -7,24 +7,6 @@
         :chart="getChartData(item._id)"
       />
     </div>
-    <!-- <div class="problem">
-      <div class="problem-title">
-        <p class="problem-title_group">
-          Problem <span class="logo-bold">Info</span>
-        </p>
-        <img
-          class="problem-icon"
-          src="~@/assets/images/notification-inactive.svg"
-          alt=""
-        />
-      </div>
-      <div class="problem-item-group">
-        <div v-for="item in 5" :key="item" class="problem-item">
-          <p class="problem-item_lighting">Lighting-01</p>
-          <p class="problem-item_timestamp">10/12/2022</p>
-        </div>
-      </div>
-    </div> -->
   </div>
 </template>
 
@@ -64,7 +46,7 @@ export default {
       axios
         .get(`${API_ENDPOINT.LIGHTING_ALL}`)
         .then((response) => {          
-          this.setData(response.data)          
+          this.setData(response.data)    
         })
         .catch(function (error) {
           console.log(error);

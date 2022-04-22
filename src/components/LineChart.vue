@@ -1,19 +1,31 @@
 <script>
-import { Line, mixins } from "vue-chartjs";
-const { reactiveProp } = mixins;
+import { Line } from 'vue-chartjs'
+import 'chartjs-plugin-streaming'
+import { mapGetters } from 'vuex'
 
 export default {
   extends: Line,
-  mixins: [reactiveProp],
   props: {
-    options: {
-      type: Object
-    }
+    chartId: String,
+    dataCollection: Object,
+    options: Object,
   },
   mounted() {
-    // this.chartData is created in the mixin.
-    // If you want to pass options please create a local options object
-    this.renderChart(this.chartData, this.options);
+    this.renderChart(this.dataCollection, this.options)
   },
-};
+  computed: {
+    ...mapGetters(['getAllLighting', 'getLightingLog', 'getTime']),
+  },
+  watch: {
+    getAllLighting(newValue, oldValue) {
+      const data = this.getLightingLog(this.chartId)
+      const { logs, ...other } = data
+      const map = logs.map((result) => ({ x: result.timestamp, y: result.ldr }))
+      this._data._chart.data.datasets.forEach(function (dataset) {
+        dataset.data.push(...map)
+      })      
+      this._data._chart.update()
+    },
+  },
+}
 </script>

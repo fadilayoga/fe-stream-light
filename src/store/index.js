@@ -35,8 +35,14 @@ export default new Vuex.Store({
       console.error(state, event)
     },
     // default handler called for all methods
-    SOCKET_ONMESSAGE(state, message) {      
-      state.allLighting = message      
+    SOCKET_ONMESSAGE(state, message) {
+      const { _id, ...data } = message[0]
+      const findIndex = state.allLighting.findIndex((lighting) => lighting._id == _id)
+      if(findIndex == -1) {
+        state.allLighting.push(message[0])
+      } else {
+        state.allLighting.splice(findIndex, 1, message[0])
+      }
     },
     // mutations for reconnect methods
     SOCKET_RECONNECT(state, count) {
@@ -117,7 +123,7 @@ export default new Vuex.Store({
       return state.allLighting
     },
     getLightingLog: (state, getters) => (id) => {
-      let chartData = state.allLighting.filter((data) => data._id == id)      
+      let chartData = state.allLighting.filter((data) => data._id == id)
       return chartData[0]
     },
     getTime: (state) => (pastTime) => {

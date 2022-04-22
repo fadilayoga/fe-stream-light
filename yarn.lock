@@ -3067,6 +3067,11 @@ chartjs-color@^2.1.0:
     chartjs-color-string "^0.6.0"
     color-convert "^1.9.3"
 
+chartjs-plugin-streaming@1.9.0:
+  version "1.9.0"
+  resolved "https://registry.yarnpkg.com/chartjs-plugin-streaming/-/chartjs-plugin-streaming-1.9.0.tgz#6e6cb744dd1bb410b1f815aadf7d8727bc79f2ce"
+  integrity sha512-oc0hhMz6N34ZSxDJotrFaEA8RhdmHhIsOI17U6ESXpEOaS0VrtuLd/dyNs2ps4zeW//jECSyP7Yl5MX070CeCg==
+
 check-types@^8.0.3:
   version "8.0.3"
   resolved "https://registry.yarnpkg.com/check-types/-/check-types-8.0.3.tgz#3356cca19c889544f2d7a95ed49ce508a0ecf552"
