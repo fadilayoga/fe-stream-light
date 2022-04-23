@@ -6,19 +6,27 @@
         <tr>
           <th class="ta-center">#</th>
           <th>Lighting</th>
-          <th>Issue Date</th>
+          <th>Problem</th>
+          <th class="ta-center">Issue Date</th>
           <th class="ta-center">Fixed</th>
           <!-- <th>Fixed Date</th> -->
           <th class="ta-center">Location</th>
         </tr>
         <tr v-for="(data, index) in logs" :key="data._id">
           <td class="ta-center">{{ (pages - 1) * limit + (index + 1) }}</td>
-          <td>Magazzini Alimentari Riuniti</td>
-          <td>12/10/2021</td>
-          <td class="ta-center"><button @click="confirm()">CONFIRM</button></td>
+          <td v-if="data.log">{{ data.log.lighting.name }}</td>
+          <td>{{ data.problem }}</td>
+          <td class="ta-center">{{ data.timestamp }}</td>
+          <td v-if="!data.solved" class="ta-center">
+            <button @click="updateStatus(data._id)">CONFIRM</button>
+          </td>
+          <td v-else class="ta-center">{{ data.solved }}</td>
           <!-- <td>16/11/2021</td> -->
           <td class="ta-center">
-            <button @click="seeLocation(data)">LOCATION</button>
+            <button v-if="getLocation(data)" @click="seeLocation(data)">
+              LOCATION
+            </button>
+            <span v-else>-</span>
           </td>
         </tr>
       </table>
@@ -70,9 +78,9 @@
 </template>
 
 <script>
-import API_ENDPOINT from "../globals/api-endpoint";
-import axios from "axios";
-import Swal from "sweetalert2";
+import API_ENDPOINT from '../globals/api-endpoint'
+import axios from 'axios'
+import Swal from 'sweetalert2'
 
 export default {
   data() {
@@ -83,51 +91,74 @@ export default {
       previous: 0,
       limit: 7,
       logs: [],
-    };
+    }
   },
   mounted() {
-    this.getDataPage(this.pages);
+    this.getDataPage(this.pages)
   },
   methods: {
     getDataPage(page) {
       axios
         .get(`${API_ENDPOINT.PROBLEM_LOGS}?page=${page}&limit=${this.limit}`)
         .then((response) => {
-          this.pages = page;
-          this.total_pages = response.data.total_pages;
-          this.next = response.data.next ? response.data.next : null;
-          this.previous = response.data.previous ? response.data.previous : null;
-          this.logs = response.data.results;
+          this.pages = page
+          this.total_pages = response.data.total_pages
+          this.next = response.data.next ? response.data.next : null
+          this.previous = response.data.previous ? response.data.previous : null
+          this.logs = response.data.results
         })
         .catch(function (error) {
-          console.log(error);
-        });
+          console.log(error)
+        })
     },
-    confirm: function () {
-      Swal.fire({
-        title: "Are you sure?",
-        text: "You won't be able to revert this!",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#3085d6",
-        cancelButtonColor: "#d33",
-        confirmButtonText: "Yes, delete it!",
-      }).then((result) => {
-        if (result.isConfirmed) {
-          Swal.fire("Deleted!", "Your file has been deleted.", "success");
-        }
-      });
-    },
+    confirm: function () {},
     seeLocation: async function (data) {
-      const { lat, long } = data.log.location;
+      const { lat, long } = data.log.location
       if (!this.$device.mobile) {
-        window.open(`https://www.google.com/maps/search/?api=1&query=${lat}%2C${long}`);
+        window.open(
+          `https://www.google.com/maps/search/?api=1&query=${lat}%2C${long}`
+        )
       } else {
-        window.location.href = `geo:${lat},${long}?q=${lat},${long}(lighting)`;
+        window.location.href = `geo:${lat},${long}?q=${lat},${long}(lighting)`
       }
     },
+    getLocation: function (data) {
+      if (data.log && data.log.location) {
+        return true
+      }
+      return false
+    },
+    updateStatus: async function (id) {
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!',
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          try {
+            const requestResult = await axios.post(`${API_ENDPOINT.PROBLEM_LOGS}/${id}`)
+            Swal.fire('Deleted!', 'Your file has been deleted.', 'success')
+              .then((result) => {
+                if (result.isConfirmed) {
+                  const findIndex = this.logs.findIndex((item) => item._id === id)
+                  this.$set(this.logs, findIndex, requestResult.data)                  
+                }
+              })
+              .catch((err) => {
+                console.log(err)
+              })
+          } catch (err) {
+            console.log(err)
+          }
+        }
+      })
+    },
   },
-};
+}
 </script>
 
 <style lang="scss" scoped>
