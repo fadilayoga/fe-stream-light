@@ -5,8 +5,6 @@ import axios from 'axios'
 import router from '../router'
 import API_ENDPOINT from '../globals/api-endpoint'
 
-axios.defaults.withCredentials = true
-
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -21,7 +19,7 @@ export default new Vuex.Store({
       addForm: false,
       isFormActive: false,
     },
-    loggedin: false,
+    loggedin: null,
   },
   mutations: {
     SOCKET_ONOPEN(state, event) {
@@ -94,7 +92,8 @@ export default new Vuex.Store({
         await axios.get(`${API_ENDPOINT.AUTH}`)
         commit('AUTH', true)
       } catch (err) {
-        console.log(err)
+        commit('AUTH', false)
+        throw err
       }
     },
     async login({ commit }, { email, password }) {

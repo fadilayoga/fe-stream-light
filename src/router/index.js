@@ -8,14 +8,16 @@ import store from '../store/index'
 
 Vue.use(VueRouter)
 
-const routes = [{
+const routes = [
+  {
     path: '/',
     name: '',
     component: Home,
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
     },
-    children: [{
+    children: [
+      {
         path: '',
         name: 'home',
         component: Dashboard,
@@ -36,46 +38,56 @@ const routes = [{
     path: '/profile',
     name: 'profile',
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
     },
-    component: () => import( /* webpackChunkName: "about" */ '../views/Profile.vue'),
+    component: () =>
+      import(/* webpackChunkName: "about" */ '../views/Profile.vue'),
   },
   {
     path: '/login',
     name: 'login',
     beforeEnter: async (to, from, next) => {
-      await store.dispatch('auth')
-      // if not, redirect to login page.
-      if (!store.getters.getLoginStatus) {
-        next() // go to wherever I'm going
+      // if not, redirect to login page.      
+      if (store.getters.getLoginStatus == null) {
+        try {
+          await store.dispatch('auth')
+          next({ name: 'home' })
+        } catch (err) {
+          next()
+        }
+      } else if (!store.getters.getLoginStatus) {
+        next()
       } else {
         next({ name: 'home' })
-      }      
+      }
     },
-    component: () => import( /* webpackChunkName: "about" */ '../views/Login.vue'),
-  }
+    component: () =>
+      import(/* webpackChunkName: "about" */ '../views/Login.vue'),
+  },
 ]
 
 const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
-  routes
+  routes,
 })
 
 router.beforeEach(async (to, from, next) => {
-  if (to.matched.some(record => record.meta.requiresAuth)) {
-    // this route requires auth, check if logged in
-    await store.dispatch('auth')
-    // if not, redirect to login page.
-    if (to.name !== 'login' && !store.getters.getLoginStatus) {
-      next({
-        name: 'login'
-      })
+  if (to.matched.some((record) => record.meta.requiresAuth)) {
+    if (store.getters.getLoginStatus == null) {
+      try {
+        await store.dispatch('auth')
+        next()
+      } catch (err) {        
+        next({ name: 'login' })
+      }
+    } else if (!store.getters.getLoginStatus) {
+      next({ name: 'login' })
     } else {
-      next() // go to wherever I'm going
+      next()
     }
   } else {
-    next() // does not require auth, make sure to always call next()!
+    next()
   }
 })
 

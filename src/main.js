@@ -1,15 +1,14 @@
 import Vue from 'vue'
-Vue.config.devtools = true
-
 import App from './App.vue'
 import './registerServiceWorker'
 import router from './router'
 import store from './store'
 import VueNativeSock from 'vue-native-websocket'
 import vClickOutside from 'v-click-outside'
-import device from "vue-device-detector"
-import CONFIG from './globals/config';
+import device from 'vue-device-detector'
+import CONFIG from './globals/config'
 import Vuelidate from 'vuelidate'
+import './globals/axios-config'
 
 Vue.use(VueNativeSock, CONFIG.WEB_SOCKET, {
   store: store,
@@ -20,15 +19,13 @@ Vue.use(VueNativeSock, CONFIG.WEB_SOCKET, {
 })
 
 Vue.use(vClickOutside)
-
 Vue.use(device)
-
 Vue.use(Vuelidate)
-
 Vue.config.productionTip = false
+Vue.config.devtools = true
 
 new Vue({
   router,
   store,
-  render: h => h(App)
+  render: (h) => h(App),
 }).$mount('#app')

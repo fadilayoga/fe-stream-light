@@ -44,8 +44,8 @@
 </template>
 
 <script>
-import { mapGetters } from "vuex";
-import { Circle2 } from "vue-loading-spinner";
+import { mapGetters } from 'vuex'
+import { Circle2 } from 'vue-loading-spinner'
 
 export default {
   components: {
@@ -53,34 +53,39 @@ export default {
   },
   data() {
     return {
-      email: "",
-      password: "",
+      email: '',
+      password: '',
       Circle2,
       loading: false,
-    };
+    }
   },
   mounted: function () {
-    document.body.style.backgroundColor = "#E5E5E5";
+    document.body.style.backgroundColor = '#E5E5E5'
   },
   destroyed: function () {
-    document.body.style.backgroundColor = null;
+    document.body.style.backgroundColor = null
   },
   computed: {
-    ...mapGetters(["getLoginStatus"]),
+    ...mapGetters(['getLoginStatus']),
   },
   methods: {
     login: async function () {
-      this.loading = true;
-      await this.$store.dispatch('login', { email: this.email, password: this.password })
-      this.loading = false;
+      this.loading = true
+      await this.$store.dispatch('login', {
+        email: this.email,
+        password: this.password,
+      })
+      this.loading = false
     },
   },
   watch: {
-    getLoginStatus(newVal, oldVal){
-      this.$router.push({ name: 'home' })      
-    }
-  }
-};
+    getLoginStatus(newVal, oldVal) {
+      if (newVal) {
+        this.$router.push({ name: 'home' })
+      }
+    },
+  },
+}
 </script>
 
 <style lang="scss" scoped>
@@ -220,7 +225,7 @@ label {
 
 @media screen and (max-width: 768px) {
   .login-form {
-    max-width: 350px;    
+    max-width: 350px;
     height: fit-content;
     margin: auto;
     border-radius: 10px;
