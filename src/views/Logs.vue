@@ -110,8 +110,7 @@ export default {
         .catch(function (error) {
           console.log(error)
         })
-    },
-    confirm: function () {},
+    },    
     seeLocation: async function (data) {
       const { lat, long } = data.log.location
       if (!this.$device.mobile) {
