@@ -15,12 +15,13 @@
         <tr v-for="(data, index) in logs" :key="data._id">
           <td class="ta-center">{{ (pages - 1) * limit + (index + 1) }}</td>
           <td v-if="data.log">{{ data.log.lighting.name }}</td>
+          <td v-else class="ta-center">-</td>
           <td>{{ data.problem }}</td>
           <td class="ta-center">{{ data.timestamp }}</td>
           <td v-if="!data.solved" class="ta-center">
             <button @click="updateStatus(data._id)">CONFIRM</button>
           </td>
-          <td v-else class="ta-center">{{ data.solved }}</td>
+          <td v-else class="ta-center">{{ data.solved.confirmed_date }}</td>
           <!-- <td>16/11/2021</td> -->
           <td class="ta-center">
             <button v-if="getLocation(data)" @click="seeLocation(data)">
