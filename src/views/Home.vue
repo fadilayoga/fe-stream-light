@@ -50,13 +50,13 @@
                     'left-panel_menu-link',
                   ]"
                 >
-                  Dashboard
+                  Analytic
                 </p>
               </a>
             </router-link>
             <router-link
               class="left-panel"
-              to="/logs"
+              to="/confirm"
               v-slot="{ href, navigate, isActive, isExactActive }"
               custom
             >
@@ -96,13 +96,13 @@
                     'left-panel_menu-link',
                   ]"
                 >
-                  Log
+                  Confirm
                 </p>
               </a>
             </router-link>
             <router-link
               class="left-panel"
-              to="/users"
+              to="/access"
               v-slot="{ href, navigate, isActive, isExactActive }"
               custom
             >
@@ -142,7 +142,7 @@
                     'left-panel_menu-link',
                   ]"
                 >
-                  User Management
+                  Access
                 </p>
               </a>
             </router-link>
@@ -249,7 +249,7 @@
             </a>
           </router-link>
           <router-link
-            to="/logs"
+            to="/confirm"
             class="nav--link"
             v-slot="{ href, navigate, isActive, isExactActive }"
             custom
@@ -283,7 +283,7 @@
             <span>Add</span>
           </button>
           <router-link
-            to="/users"
+            to="/access"
             class="nav--link"
             v-slot="{ href, navigate, isActive, isExactActive }"
             custom
@@ -352,13 +352,13 @@ export default {
   computed: {
     getPath() {
       let path = this.$route.path
-      if (path === '/') return 'Dashboard'
+      if (path === '/') return 'Analytic'
       let stringSplit = path.split('/')[1]
       let upperCase = stringSplit.charAt(0).toUpperCase() + stringSplit.slice(1)
       return upperCase
     },
     addAccessButton() {
-      if (this.$route.name === 'users') {
+      if (this.$route.name === 'access') {
         return true
       }
       return false

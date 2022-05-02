@@ -129,6 +129,10 @@ export default new Vuex.Store({
       let now = moment(pastTime).format('H:m:s')
       return now
     },
+    getDate: (state) => (pastTime) => {
+      let now = moment(pastTime).format('DD-MM-YYYYTHH:mm:ss')
+      return now
+    },
     getForm(state) {
       return state.form
     },

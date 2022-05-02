@@ -1,6 +1,6 @@
 <template>
   <div class="logs">
-    <h5>Table <span class="title-bold">Logs</span></h5>
+    <h5>Table <span class="title-bold">Confirm</span></h5>
     <div class="logs-table">
       <table>
         <tr>
@@ -17,11 +17,13 @@
           <td v-if="data.log">{{ data.log.lighting.name }}</td>
           <td v-else class="ta-center">-</td>
           <td>{{ data.problem }}</td>
-          <td class="ta-center">{{ data.timestamp }}</td>
+          <td class="ta-center">{{ getDate(data.timestamp) }}</td>
           <td v-if="!data.solved" class="ta-center">
             <button @click="updateStatus(data._id)">CONFIRM</button>
           </td>
-          <td v-else class="ta-center">{{ data.solved.confirmed_date }}</td>
+          <td v-else class="ta-center">
+            {{ getDate(data.solved.confirmed_date) }}
+          </td>
           <!-- <td>16/11/2021</td> -->
           <td class="ta-center">
             <button v-if="getLocation(data)" @click="seeLocation(data)">
@@ -33,7 +35,7 @@
       </table>
     </div>
     <div class="bottom-logs">
-      <div class="bottom-logs_export">
+      <div class="bottom-logs_export" style="opacity: 0">
         <button class="bottom-logs_export-button">
           <img src="~@/assets/images/description.svg" alt="" />
           <span>PDF</span>
@@ -79,6 +81,7 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import API_ENDPOINT from '../globals/api-endpoint'
 import axios from 'axios'
 import Swal from 'sweetalert2'
@@ -97,6 +100,9 @@ export default {
   mounted() {
     this.getDataPage(this.pages)
   },
+  computed: {
+    ...mapGetters(['getDate']),
+  },
   methods: {
     getDataPage(page) {
       axios
@@ -111,7 +117,7 @@ export default {
         .catch(function (error) {
           console.log(error)
         })
-    },    
+    },
     seeLocation: async function (data) {
       const { lat, long } = data.log.location
       if (!this.$device.mobile) {
@@ -140,12 +146,16 @@ export default {
       }).then(async (result) => {
         if (result.isConfirmed) {
           try {
-            const requestResult = await axios.post(`${API_ENDPOINT.PROBLEM_LOGS}/${id}`)
+            const requestResult = await axios.post(
+              `${API_ENDPOINT.PROBLEM_LOGS}/${id}`
+            )
             Swal.fire('Deleted!', 'Your file has been deleted.', 'success')
               .then((result) => {
                 if (result.isConfirmed) {
-                  const findIndex = this.logs.findIndex((item) => item._id === id)
-                  this.$set(this.logs, findIndex, requestResult.data)                  
+                  const findIndex = this.logs.findIndex(
+                    (item) => item._id === id
+                  )
+                  this.$set(this.logs, findIndex, requestResult.data)
                 }
               })
               .catch((err) => {

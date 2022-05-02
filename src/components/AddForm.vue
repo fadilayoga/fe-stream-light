@@ -85,7 +85,6 @@
           <option value="" disabled selected hidden>Choose Level...</option>
           <option value="superadmin">Superadmin</option>
           <option value="admin">Admin</option>
-          <option value="none">None</option>
         </select>
         <div class="error" v-if="$v.role.$error && !$v.role.required">
           Role is required
@@ -117,17 +116,6 @@
                 name="gender"
                 value="woman"
               />Woman
-            </label>
-          </div>
-          <div class="lighting-item_gender">
-            <label class="lighting-item_gender-type" for=" none">
-              <input
-                v-model.trim="$v.gender.$model"
-                type="radio"
-                id=" none"
-                name="gender"
-                value=" none"
-              />None
             </label>
           </div>
         </fieldset>

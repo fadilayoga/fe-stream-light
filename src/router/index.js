@@ -23,13 +23,13 @@ const routes = [
         component: Dashboard,
       },
       {
-        path: 'logs',
-        name: 'logs',
+        path: 'confirm',
+        name: 'confirm',
         component: Logs,
       },
       {
-        path: 'users',
-        name: 'users',
+        path: 'access',
+        name: 'access',
         component: Users,
       },
     ],

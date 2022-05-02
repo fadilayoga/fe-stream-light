@@ -82,7 +82,6 @@
           <option value="" disabled selected hidden>Choose Level...</option>
           <option value="superadmin">Superadmin</option>
           <option value="admin">Admin</option>
-          <option value="none">None</option>
         </select>
         <div class="error" v-if="$v.role.$error && !$v.role.required">
           Role is required
@@ -114,17 +113,6 @@
                 name="gender"
                 value="woman"
               />Woman
-            </label>
-          </div>
-          <div class="lighting-item_gender">
-            <label class="lighting-item_gender-type" for=" none">
-              <input
-                v-model.trim="$v.gender.$model"
-                type="radio"
-                id=" none"
-                name="gender"
-                value=" none"
-              />None
             </label>
           </div>
         </fieldset>
@@ -299,7 +287,10 @@ export default {
         formData.append('gender', this.gender)
 
         try {
-          const result = await axios.patch(`${API_ENDPOINT.USERS}/${this.id}`, formData)
+          const result = await axios.patch(
+            `${API_ENDPOINT.USERS}/${this.id}`,
+            formData
+          )
           this.$emit('reRender', result.data)
           this.resetForm()
         } catch (err) {

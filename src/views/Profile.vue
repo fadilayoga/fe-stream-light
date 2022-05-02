@@ -69,11 +69,11 @@
               alt=""
               v-else
             />
-            <span>Analytics</span>
+            <span>Analytic</span>
           </a>
         </router-link>
         <router-link
-          to="/logs"
+          to="/confirm"
           class="nav--link"
           v-slot="{ href, navigate, isActive, isExactActive }"
           custom
@@ -95,7 +95,7 @@
           </a>
         </router-link>
         <router-link
-          to="/users"
+          to="/access"
           class="nav--link"
           v-slot="{ href, navigate, isActive, isExactActive }"
           custom
