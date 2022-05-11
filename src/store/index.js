@@ -20,6 +20,7 @@ export default new Vuex.Store({
       isFormActive: false,
     },
     loggedin: null,
+    role: '',
   },
   mutations: {
     SOCKET_ONOPEN(state, event) {
@@ -35,8 +36,10 @@ export default new Vuex.Store({
     // default handler called for all methods
     SOCKET_ONMESSAGE(state, message) {
       const { _id, ...data } = message[0]
-      const findIndex = state.allLighting.findIndex((lighting) => lighting._id == _id)
-      if(findIndex == -1) {
+      const findIndex = state.allLighting.findIndex(
+        (lighting) => lighting._id == _id
+      )
+      if (findIndex == -1) {
         state.allLighting.push(message[0])
       } else {
         state.allLighting.splice(findIndex, 1, message[0])
@@ -73,6 +76,9 @@ export default new Vuex.Store({
     AUTH: (state, payload) => {
       state.loggedin = payload
     },
+    ROLE: (state, payload) => {
+      state.role = payload
+    },
   },
   actions: {
     setLighting({ commit }, payload) {
@@ -89,8 +95,9 @@ export default new Vuex.Store({
     },
     async auth({ commit }) {
       try {
-        await axios.get(`${API_ENDPOINT.AUTH}`)
+        const result = await axios.get(`${API_ENDPOINT.AUTH}`)
         commit('AUTH', true)
+        commit('ROLE', result.data.role)
       } catch (err) {
         commit('AUTH', false)
         throw err
@@ -98,11 +105,12 @@ export default new Vuex.Store({
     },
     async login({ commit }, { email, password }) {
       try {
-        await axios.post(`${API_ENDPOINT.LOGIN}`, {
+        const result = await axios.post(`${API_ENDPOINT.LOGIN}`, {
           email: email,
           password: password,
         })
         commit('AUTH', true)
+        commit('ROLE', result.data.role)
       } catch (err) {
         console.log(err)
       }
@@ -115,6 +123,10 @@ export default new Vuex.Store({
       } catch (err) {
         console.log(err)
       }
+    },
+    selfUpdate({ commit }, payload) {
+      commit('ROLE', payload)
+      if (payload == 'admin') router.push({ name: 'home' })
     },
   },
   getters: {
@@ -130,7 +142,7 @@ export default new Vuex.Store({
       return now
     },
     getDate: (state) => (pastTime) => {
-      let now = moment(pastTime).format('DD-MM-YYYYTHH:mm:ss')
+      let now = moment(pastTime).format('DD-MM-YYYY/HH:mm:ss')
       return now
     },
     getForm(state) {
@@ -138,6 +150,12 @@ export default new Vuex.Store({
     },
     getLoginStatus: function (state) {
       return state.loggedin
+    },
+    getRole: function (state) {
+      if (state.role == 'superadmin') {
+        return true
+      }
+      return false
     },
   },
   modules: {},

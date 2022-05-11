@@ -35,12 +35,12 @@
       </table>
     </div>
     <div class="bottom-logs">
-      <div class="bottom-logs_export" style="opacity: 0">
-        <button class="bottom-logs_export-button">
+      <div class="bottom-logs_export">
+        <!-- <button class="bottom-logs_export-button">
           <img src="~@/assets/images/description.svg" alt="" />
           <span>PDF</span>
-        </button>
-        <button class="bottom-logs_export-button">
+        </button> -->
+        <button class="bottom-logs_export-button" @click="exportFile">
           <img src="~@/assets/images/spreadsheet.svg" alt="" />
           <span>SPREADSHEET</span>
         </button>
@@ -142,7 +142,7 @@ export default {
         showCancelButton: true,
         confirmButtonColor: '#3085d6',
         cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, delete it!',
+        confirmButtonText: 'Yes, confirm it!',
       }).then(async (result) => {
         if (result.isConfirmed) {
           try {
@@ -166,6 +166,14 @@ export default {
           }
         }
       })
+    },
+    exportFile: async function () {
+      try {
+        const result = await axios.get(`${API_ENDPOINT.EXPORT_FILE}`)
+        window.open(result.data);
+      } catch (err) {
+        console.log(err)
+      }
     },
   },
 }

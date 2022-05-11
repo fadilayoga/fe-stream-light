@@ -49,107 +49,19 @@
       <h2 class="grid-two_role">{{ user.role }}</h2>
     </div>
     <show-at breakpoint="small">
-      <div class="nav">
-        <router-link
-          to="/"
-          class="nav--link"
-          v-slot="{ href, navigate, isActive, isExactActive }"
-          custom
-        >
-          <a :href="href" @click="navigate">
-            <img
-              class="nav--icon"
-              src="~@/assets/images/homepage-active.svg"
-              alt=""
-              v-if="isExactActive"
-            />
-            <img
-              class="nav--icon"
-              src="~@/assets/images/homepage-inactive.svg"
-              alt=""
-              v-else
-            />
-            <span>Analytic</span>
-          </a>
-        </router-link>
-        <router-link
-          to="/confirm"
-          class="nav--link"
-          v-slot="{ href, navigate, isActive, isExactActive }"
-          custom
-        >
-          <a :href="href" @click="navigate">
-            <img
-              class="nav--icon"
-              src="~@/assets/images/warning-active.svg"
-              alt=""
-              v-if="isExactActive"
-            />
-            <img
-              class="nav--icon"
-              src="~@/assets/images/warning-inactive.svg"
-              alt=""
-              v-else
-            />
-            <span>Confirm</span>
-          </a>
-        </router-link>
-        <router-link
-          to="/access"
-          class="nav--link"
-          v-slot="{ href, navigate, isActive, isExactActive }"
-          custom
-        >
-          <a :href="href" @click="navigate">
-            <img
-              class="nav--icon"
-              src="~@/assets/images/user-management-active.svg"
-              alt=""
-              v-if="isExactActive"
-            />
-            <img
-              class="nav--icon"
-              src="~@/assets/images/user-management-inactive.svg"
-              alt=""
-              v-else
-            />
-            <span>Access</span>
-          </a>
-        </router-link>
-        <router-link
-          to="/profile"
-          class="nav--link"
-          v-slot="{ href, navigate, isActive, isExactActive }"
-          custom
-        >
-          <a :href="href" @click="navigate">
-            <img
-              class="nav--icon"
-              src="~@/assets/images/icons/user-outline-active.svg"
-              alt=""
-              v-if="isExactActive"
-            />
-            <img
-              class="nav--icon"
-              src="~@/assets/images/icons/user-outline-inactive.svg"
-              alt=""
-              v-else
-            />
-            <span>Account</span>
-          </a>
-        </router-link>
-      </div>
+      <bottom-menu />
     </show-at>
   </div>
 </template>
 
 <script>
 import API_ENDPOINT from '../globals/api-endpoint'
+import BottomMenu from '../components/BottomMenu.vue'
 import { showAt, hideAt } from 'vue-breakpoints'
 import { mapActions } from 'vuex'
 import axios from 'axios'
 export default {
-  components: { hideAt, showAt },
+  components: { hideAt, showAt, BottomMenu },
   data() {
     return {
       profileMenu: false,
@@ -411,38 +323,6 @@ export default {
 
     &-bold {
       font-weight: 700;
-    }
-  }
-  .nav {
-    position: fixed;
-    width: 100%;
-    height: 55px;
-    box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
-    bottom: 0;
-    display: flex;
-    align-items: center;
-    background-color: #ffffff;
-    overflow-x: auto;
-
-    &--link {
-      flex-grow: 1;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      min-width: 50px;
-      overflow-x: hidden;
-      white-space: nowrap;
-      font-size: 13px;
-      color: #444444;
-      text-decoration: none;
-      justify-content: center;
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    &--icon {
-      width: 100%;
-      max-width: 25px;
     }
   }
 }

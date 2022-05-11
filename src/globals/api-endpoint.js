@@ -10,7 +10,8 @@ const API_ENDPOINT = {
   LOCATION: `${CONFIG.BASE_URL}location`,  
   USERS: `${CONFIG.BASE_URL}users`,
   STATIC: `${CONFIG.BASE_URL}static`,
-  PICTURE: `${CONFIG.BASE_URL}users/picture`,
+  PICTURE: `${CONFIG.BASE_URL}users/picture`,  
+  EXPORT_FILE: `${CONFIG.BASE_URL}export-problem-logs`,
 };
 
 export default API_ENDPOINT;

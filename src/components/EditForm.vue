@@ -291,8 +291,9 @@ export default {
             `${API_ENDPOINT.USERS}/${this.id}`,
             formData
           )
-          this.$emit('reRender', result.data)
+          this.$emit('reRender', result.data.newData)
           this.resetForm()
+          this.selfUpdate(result.data)
         } catch (err) {
           console.log(err)
           this.loading = false
@@ -366,6 +367,11 @@ export default {
         document.body.classList.remove('modal-open')
       }
       this.loading = false
+    },
+    selfUpdate(response) {
+      if (response.selfUpdate) {
+        this.$store.dispatch('selfUpdate', response.newData.role)
+      }
     },
   },
   validations: {

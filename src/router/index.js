@@ -47,7 +47,7 @@ const routes = [
     path: '/login',
     name: 'login',
     beforeEnter: async (to, from, next) => {
-      // if not, redirect to login page.      
+      // if not, redirect to login page.
       if (store.getters.getLoginStatus == null) {
         try {
           await store.dispatch('auth')
@@ -64,6 +64,15 @@ const routes = [
     component: () =>
       import(/* webpackChunkName: "about" */ '../views/Login.vue'),
   },
+  {
+    path: '/401',
+    name: 'unauthorized',
+    component: () => import(/* webpackChunkName: "about" */ '../views/401.vue'),
+  },
+  {
+    path: '*',
+    component: () => import(/* webpackChunkName: "about" */ '../views/404.vue'),
+  },
 ]
 
 const router = new VueRouter({
@@ -72,13 +81,13 @@ const router = new VueRouter({
   routes,
 })
 
-router.beforeEach(async (to, from, next) => {
+router.beforeEach(async (to, from, next) => {  
   if (to.matched.some((record) => record.meta.requiresAuth)) {
-    if (store.getters.getLoginStatus == null) {
+    if (store.getters.getLoginStatus == null) {      
       try {
         await store.dispatch('auth')
         next()
-      } catch (err) {        
+      } catch (err) {
         next({ name: 'login' })
       }
     } else if (!store.getters.getLoginStatus) {
