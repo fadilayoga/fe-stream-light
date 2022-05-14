@@ -14,7 +14,7 @@ axios.interceptors.response.use(
       if (router.currentRoute.name) {
         router.push('./login')
       }
-    } else if (error.response.status === 401) {      
+    } else if (error.response.status === 401) {
       if (router.currentRoute.name) {
         router.push('./401')
       }

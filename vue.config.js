@@ -5,6 +5,7 @@ module.exports = {
   devServer: {
     disableHostCheck: true,
   },
+  outputDir : 'C:/inetpub/stream-light-backend',
   lintOnSave: false,
   configureWebpack: {
     plugins: [
