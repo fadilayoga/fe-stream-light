@@ -6,8 +6,8 @@ const CONFIG = {
     MESSAGING_SENDER_ID: "234164185380",
     APP_ID: "1:234164185380:web:9b2d2d59e50c4eec096bb1",
     VAPID_KEY: "BBmItBj7schdRO2f1GzT1gX9Hion4WRo0Wg3ferJTSO45zOY6wAWaE4B358HWtL1DwCwsf_IIHSJ-1UnWMmtgfQ",
-    BASE_URL: "https://lightstream.site/",
-    WEB_SOCKET: "ws://lightstream.site:3000/"
+    BASE_URL: "http://40.77.21.100/",
+    WEB_SOCKET: "ws://40.77.21.100:3000/"
   };
 
 export default CONFIG
