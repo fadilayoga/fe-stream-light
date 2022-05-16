@@ -6,7 +6,7 @@ const CONFIG = {
     MESSAGING_SENDER_ID: "234164185380",
     APP_ID: "1:234164185380:web:9b2d2d59e50c4eec096bb1",
     VAPID_KEY: "BBmItBj7schdRO2f1GzT1gX9Hion4WRo0Wg3ferJTSO45zOY6wAWaE4B358HWtL1DwCwsf_IIHSJ-1UnWMmtgfQ",
-    BASE_URL: "http://lightstream.site/",
+    BASE_URL: "https://lightstream.site/",
     WEB_SOCKET: "wss://lightstream.site/"
   };
 
