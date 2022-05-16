@@ -12,6 +12,7 @@
 
 <script>
 import LineChart from '@/components/LineChart.vue'
+import { mapGetters } from 'vuex'
 
 export default {
   components: {
@@ -24,7 +25,17 @@ export default {
     return {
       chartId: this.chart.result[0]._id,
       chartName: this.chart.result[0].name,
+      chartData: this.chart.result[0].logs,
+      chartDataClean: []
     }
+  },
+  mounted() {    
+    const { logs, ...other } = this.chartData
+    const map = logs.map((result) => ({ x: result.timestamp, y: result.ldr }))
+    this.chartDataClean = map
+  },
+  computed: {
+    ...mapGetters(['getAllLighting', 'getLightingLog', 'getTime']),
   },
   methods: {
     dataCollection() {
@@ -36,7 +47,7 @@ export default {
             borderColor: 'white',
             pointBorderColor: 'black',
             pointBackgroundColor: 'coral',
-            data: [],
+            data: this.chartDataClean,
           },
         ],
       }
@@ -54,16 +65,16 @@ export default {
             },
           ],
           xAxes: [
-          {
-            type: 'realtime',
-            realtime: {
-              duration: 20000,
-              refresh: 1000,
-              delay: 2000,
+            {
+              type: 'realtime',
+              realtime: {
+                duration: 20000,
+                refresh: 1000,
+                delay: 2000,
+              },
             },
-          },
-        ],
-        },      
+          ],
+        },
       }
     },
   },

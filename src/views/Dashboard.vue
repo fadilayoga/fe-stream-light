@@ -11,10 +11,10 @@
 </template>
 
 <script>
-import MainChart from "../components/MainChart.vue";
-import { mapGetters } from "vuex";
-import API_ENDPOINT from "../globals/api-endpoint";
-import axios from "axios";
+import MainChart from '../components/MainChart.vue'
+import { mapGetters } from 'vuex'
+import API_ENDPOINT from '../globals/api-endpoint'
+import axios from 'axios'
 
 export default {
   components: {
@@ -23,43 +23,43 @@ export default {
   data() {
     return {
       lightingData: [],
-    };
+    }
   },
   props: {
     lighting: Array,
   },
   mounted() {
-    this.getAllData();
+    this.getAllData()
   },
   computed: {
-    ...mapGetters(["getAllLighting"]),
+    ...mapGetters(['getAllLighting']),
   },
   methods: {
-    getKey(_id) {
-      return `${_id}.${new Date().getTime()}`;
+    generateKey(_id) {
+      return _id + Date.now()
     },
-    getChartData(_id) {      
-      let chartData = this.$store.getters.getLightingLog(_id);         
-      return chartData;
+    getChartData(_id) {
+      let chartData = this.$store.getters.getLightingLog(_id)
+      return chartData
     },
     getAllData() {
       axios
         .get(`${API_ENDPOINT.LIGHTING_ALL}`)
-        .then((response) => {          
-          this.setData(response.data)    
+        .then((response) => {
+          this.setData(response.data)
         })
         .catch(function (error) {
-          console.log(error);
-        });
+          console.log(error)
+        })
     },
     setData(payload) {
       this.$store.dispatch({
-            type: "setLighting",
-            payload,
-          });
-    }
+        type: 'setLighting',
+        payload,
+      })
+    },
   },
-};
+}
 </script>
 
 <style lang="scss" scoped>

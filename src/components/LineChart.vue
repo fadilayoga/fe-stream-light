@@ -23,7 +23,7 @@ export default {
       const map = logs.map((result) => ({ x: result.timestamp, y: result.ldr }))
       this._data._chart.data.datasets.forEach(function (dataset) {
         dataset.data.push(...map)
-      })      
+      })
       this._data._chart.update()
     },
   },
