@@ -320,6 +320,15 @@ export default {
         document.body.classList.remove('modal-open')
       }
       this.loading = false
+      this.previewimg = null
+      this.name = ''
+      this.email = ''
+      this.password = ''
+      this.age = ''
+      this.role = ''
+      this.gender = ''
+      this.file = ''
+      this.$v.$reset()
     },
   },
   validations: {

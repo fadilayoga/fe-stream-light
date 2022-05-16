@@ -159,6 +159,7 @@ export default {
     renderRemove(payload) {
       const findIndex = this.users.findIndex((user) => user._id == payload)
       this.$delete(this.users, findIndex)
+      this.$store.dispatch('closeForm')
     },
     renderAdd(payload) {
       this.users.push(payload)
