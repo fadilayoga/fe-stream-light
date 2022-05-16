@@ -1,8 +1,5 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Logs from '../views/Logs.vue'
-import Users from '../views/Users.vue'
-import Dashboard from '../views/Dashboard.vue'
 import store from '../store/index'
 
 Vue.use(VueRouter)
@@ -14,25 +11,28 @@ const routes = [
     meta: {
       requiresAuth: true,
     },
+    component: () =>
+      import(/* webpackChunkName: "about" */ '../views/Home.vue'),
     children: [
       {
         path: '',
         name: 'home',
-        component: Dashboard,
+        component: () =>
+          import(/* webpackChunkName: "about" */ '../views/Dashboard.vue'),
       },
       {
         path: 'confirm',
         name: 'confirm',
-        component: Logs,
+        component: () =>
+          import(/* webpackChunkName: "about" */ '../views/Logs.vue'),
       },
       {
         path: 'access',
         name: 'access',
-        component: Users,
+        component: () =>
+          import(/* webpackChunkName: "about" */ '../views/Users.vue'),
       },
     ],
-    component: () =>
-      import(/* webpackChunkName: "about" */ '../views/Home.vue'),
   },
   {
     path: '/profile',
