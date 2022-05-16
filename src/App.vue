@@ -4,18 +4,9 @@
   </div>
 </template>
 
-<script>
-// import registrationToken from "./utils/registration-token-helper";
-export default {
-  mounted() {
-    // registrationToken.getToken();
-  },
-};
-</script>
-
 <style lang="scss">
 * {
-  font-family: "LexendaDeca";
+  font-family: 'LexendaDeca';
   -webkit-user-drag: none;
   user-select: none;
   -moz-user-select: none;

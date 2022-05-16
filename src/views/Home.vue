@@ -5,7 +5,7 @@
         <div class="grid-container">
           <div class="grid-one">
             <router-link class="logo" to="/"
-              >STREAM <span class="logo-bold">LIGHT</span></router-link
+              >LIGHT <span class="logo-bold">STREAM</span></router-link
             >
             <h5 class="left-panel-title">App</h5>
             <router-link
@@ -162,7 +162,9 @@
                 v-click-outside="closeDialog"
                 class="navbar-dropdown_menu"
               >
-                <router-link to="/profile" class="navbar-dropdown_menu-login">Profile</router-link>
+                <router-link to="/profile" class="navbar-dropdown_menu-login"
+                  >Profile</router-link
+                >
                 <p @click="logout" class="navbar-dropdown_menu-login">Logout</p>
               </div>
             </div>
@@ -182,7 +184,7 @@
       <div class="mobile-viewport">
         <div class="grid_mobile-grid-one">
           <router-link class="grid_mobile-grid-one-logo" to="/"
-            >STREAM <span class="grid_mobile-grid-one-logo-bold">LIGHT</span>
+            >LIGHT <span class="grid_mobile-grid-one-logo-bold">STREAM</span>
           </router-link>
           <div class="grid_mobile-grid-one-navbar">
             <div
@@ -224,7 +226,7 @@
 </template>
 
 <script>
-import BottomMenu from '../components/BottomMenu.vue'
+const BottomMenu = () => import('../components/BottomMenu.vue')
 import { showAt, hideAt } from 'vue-breakpoints'
 import { mapActions } from 'vuex'
 import { mapGetters } from 'vuex'

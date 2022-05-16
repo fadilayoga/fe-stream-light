@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import LineChart from '@/components/LineChart.vue'
+const LineChart = () => import('@/components/LineChart.vue')
 import { mapGetters } from 'vuex'
 
 export default {

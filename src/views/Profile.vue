@@ -56,7 +56,7 @@
 
 <script>
 import API_ENDPOINT from '../globals/api-endpoint'
-import BottomMenu from '../components/BottomMenu.vue'
+const BottomMenu = () => import('../components/BottomMenu.vue')
 import { showAt, hideAt } from 'vue-breakpoints'
 import { mapActions } from 'vuex'
 import axios from 'axios'

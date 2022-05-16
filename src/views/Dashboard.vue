@@ -11,11 +11,10 @@
 </template>
 
 <script>
-import MainChart from '../components/MainChart.vue'
 import { mapGetters } from 'vuex'
 import API_ENDPOINT from '../globals/api-endpoint'
 import axios from 'axios'
-
+const MainChart = () => import('../components/MainChart.vue')
 export default {
   components: {
     MainChart,

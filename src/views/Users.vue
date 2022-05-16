@@ -85,10 +85,10 @@
 
 <script>
 import API_ENDPOINT from '../globals/api-endpoint'
-import AddForm from '../components/AddForm.vue'
-import EditForm from '../components/EditForm.vue'
-import EditButton from '../components/EditButton.vue'
-import RemoveButton from '../components/RemoveButton.vue'
+const AddForm = () => import('../components/AddForm.vue')
+const EditForm = () => import('../components/EditForm.vue')
+const EditButton = () => import('../components/EditButton.vue')
+const RemoveButton = () => import('../components/RemoveButton.vue')
 import { showAt, hideAt } from 'vue-breakpoints'
 import { mapGetters } from 'vuex'
 import axios from 'axios'
