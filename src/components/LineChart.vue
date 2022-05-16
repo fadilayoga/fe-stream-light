@@ -22,9 +22,9 @@ export default {
     ...mapGetters(['getAllLighting', 'getLightingLog', 'getTime']),
   },
   watch: {
-    getAllLighting(newValue, oldValue) {
+    getAllLighting() {
       const data = this.getLightingLog(this.chartId)
-      const { logs, ...other } = data
+      const { logs } = data
       const map = logs.map((result) => ({ x: result.timestamp, y: result.ldr }))
       this._data._chart.data.datasets.forEach(function (dataset) {
         dataset.data.push(map[map.length - 1])

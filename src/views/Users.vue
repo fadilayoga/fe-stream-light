@@ -174,7 +174,7 @@ export default {
     },
   },
   watch: {
-    getForm(newValue, oldValue) {
+    getForm(newValue) {
       this.isAddFormActive = newValue.addForm
       this.isFormActive = newValue.isFormActive
     },

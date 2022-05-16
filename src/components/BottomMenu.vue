@@ -6,7 +6,7 @@
       <router-link
         to="/"
         class="nav--link"
-        v-slot="{ href, navigate, isActive, isExactActive }"
+        v-slot="{ href, navigate, isExactActive }"
         custom
       >
         <a :href="href" @click="navigate">
@@ -28,7 +28,7 @@
       <router-link
         to="/confirm"
         class="nav--link"
-        v-slot="{ href, navigate, isActive, isExactActive }"
+        v-slot="{ href, navigate, isExactActive }"
         custom
       >
         <a :href="href" @click="navigate">
@@ -63,7 +63,7 @@
         v-if="getRole"
         to="/access"
         class="nav--link"
-        v-slot="{ href, navigate, isActive, isExactActive }"
+        v-slot="{ href, navigate, isExactActive }"
         custom
       >
         <a :href="href" @click="navigate">
@@ -85,7 +85,7 @@
       <router-link
         to="/profile"
         class="nav--link"
-        v-slot="{ href, navigate, isActive, isExactActive }"
+        v-slot="{ href, navigate, isExactActive }"
         custom
       >
         <a :href="href" @click="navigate">

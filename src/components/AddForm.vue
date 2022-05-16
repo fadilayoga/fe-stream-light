@@ -210,7 +210,7 @@
 <script>
 import API_ENDPOINT from '../globals/api-endpoint'
 import { Circle2 } from 'vue-loading-spinner'
-import { showAt, hideAt } from 'vue-breakpoints'
+import { showAt } from 'vue-breakpoints'
 import {
   required,
   minLength,
@@ -233,7 +233,6 @@ export default {
   components: {
     Circle2,
     showAt,
-    hideAt,
   },
   data() {
     return {

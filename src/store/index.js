@@ -27,7 +27,7 @@ export default new Vuex.Store({
       Vue.prototype.$socket = event.currentTarget
       state.socket.isConnected = true
     },
-    SOCKET_ONCLOSE(state, event) {
+    SOCKET_ONCLOSE(state) {
       state.socket.isConnected = false
     },
     SOCKET_ONERROR(state, event) {
@@ -35,7 +35,7 @@ export default new Vuex.Store({
     },
     // default handler called for all methods
     SOCKET_ONMESSAGE(state, message) {
-      const { _id, ...data } = message[0]
+      const { _id } = message[0]
       const findIndex = state.allLighting.findIndex(
         (lighting) => lighting._id == _id
       )
@@ -55,19 +55,19 @@ export default new Vuex.Store({
     LIGHTING(state, payload) {
       state.allLighting = payload
     },
-    ADD_FORM(state, payload) {
+    ADD_FORM(state) {
       state.form = {
         addForm: true,
         isFormActive: true,
       }
     },
-    UPDATE_FORM(state, payload) {
+    UPDATE_FORM(state) {
       state.form = {
         addForm: false,
         isFormActive: true,
       }
     },
-    CLOSE_FORM(state, payload) {
+    CLOSE_FORM(state) {
       state.form = {
         addForm: true,
         isFormActive: false,
@@ -133,15 +133,15 @@ export default new Vuex.Store({
     getAllLighting(state) {
       return state.allLighting
     },
-    getLightingLog: (state, getters) => (id) => {
+    getLightingLog: (state) => (id) => {
       let chartData = state.allLighting.filter((data) => data._id == id)
       return chartData[0]
     },
-    getTime: (state) => (pastTime) => {
+    getTime: () => (pastTime) => {
       let now = moment(pastTime).format('H:m:s')
       return now
     },
-    getDate: (state) => (pastTime) => {
+    getDate: () => (pastTime) => {
       let now = moment(pastTime).format('DD-MM-YYYY/HH:mm:ss')
       return now
     },

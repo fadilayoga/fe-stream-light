@@ -216,7 +216,7 @@
 <script>
 import API_ENDPOINT from '../globals/api-endpoint'
 import { Circle2 } from 'vue-loading-spinner'
-import { showAt, hideAt } from 'vue-breakpoints'
+import { showAt } from 'vue-breakpoints'
 import {
   required,
   minLength,
@@ -405,7 +405,7 @@ export default {
     },
   },
   watch: {
-    userdataprops: function (newVal, oldVal) {
+    userdataprops: function (newVal) {
       this.id = newVal._id
       this.name = newVal.name
       this.email = newVal.email

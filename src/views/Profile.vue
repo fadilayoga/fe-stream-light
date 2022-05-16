@@ -57,11 +57,11 @@
 <script>
 import API_ENDPOINT from '../globals/api-endpoint'
 const BottomMenu = () => import('../components/BottomMenu.vue')
-import { showAt, hideAt } from 'vue-breakpoints'
+import { showAt } from 'vue-breakpoints'
 import { mapActions } from 'vuex'
 import axios from 'axios'
 export default {
-  components: { hideAt, showAt, BottomMenu },
+  components: { showAt, BottomMenu },
   data() {
     return {
       profileMenu: false,
