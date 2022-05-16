@@ -327,7 +327,7 @@ export default {
           if (swal2.isConfirmed) {
             this.previewimg = ''
             this.file = ''
-            this.$emit('reRender', result.newData.role)
+            this.$emit('reRender', result.data.newData)
           }
         } catch (err) {
           Swal.fire('Oh no', 'Failed deleted File', 'warning')
