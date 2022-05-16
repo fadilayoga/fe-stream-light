@@ -2,7 +2,7 @@
   <div class="container">
     <hide-at breakpoint="small">
       <div>
-        <add-form v-if="isAddFormActive" @reRender="renderUpdate"></add-form>
+        <add-form v-if="isAddFormActive" @reRender="renderAdd"></add-form>
         <edit-form
           :userdataprops="userdata"
           v-if="!isAddFormActive"
@@ -68,7 +68,7 @@
             class="modal"
             v-if="isFormActive && isAddFormActive"
             @closeForm="closeForm"
-            @reRender="renderUpdate"
+            @reRender="renderAdd"
           ></add-form>
           <edit-form
             class="modal"
@@ -159,6 +159,9 @@ export default {
     renderRemove(payload) {
       const findIndex = this.users.findIndex((user) => user._id == payload)
       this.$delete(this.users, findIndex)
+    },
+    renderAdd(payload) {
+      this.users.push(payload)
     },
     renderUpdate(payload) {
       const findIndex = this.users.findIndex((user) => user._id == payload._id)
