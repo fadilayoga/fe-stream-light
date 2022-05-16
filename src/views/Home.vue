@@ -162,6 +162,7 @@
                 v-click-outside="closeDialog"
                 class="navbar-dropdown_menu"
               >
+                <router-link to="/profile" class="navbar-dropdown_menu-login">Profile</router-link>
                 <p @click="logout" class="navbar-dropdown_menu-login">Logout</p>
               </div>
             </div>

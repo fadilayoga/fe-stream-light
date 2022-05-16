@@ -9,9 +9,14 @@ export default {
     chartId: String,
     dataCollection: Object,
     options: Object,
+    chartData: Array,
   },
   mounted() {
     this.renderChart(this.dataCollection, this.options)
+    this._data._chart.data.datasets.forEach((dataset) => {
+      dataset.data = this.chartData
+    })
+    this._data._chart.update()
   },
   computed: {
     ...mapGetters(['getAllLighting', 'getLightingLog', 'getTime']),
@@ -22,7 +27,7 @@ export default {
       const { logs, ...other } = data
       const map = logs.map((result) => ({ x: result.timestamp, y: result.ldr }))
       this._data._chart.data.datasets.forEach(function (dataset) {
-        dataset.data.push(...map)
+        dataset.data.push(map[map.length - 1])
       })
       this._data._chart.update()
     },

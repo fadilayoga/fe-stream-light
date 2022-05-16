@@ -4,6 +4,7 @@
     <line-chart
       :height="150"
       :chartId="chartId"
+      :chartData="getData()"
       :options="options()"
       :dataCollection="dataCollection()"
     ></line-chart>
@@ -23,21 +24,23 @@ export default {
   },
   data() {
     return {
-      chartId: this.chart.result[0]._id,
+      chartId: this.chart._id,
       chartName: this.chart.result[0].name,
-      chartData: this.chart.result[0].logs,
-      chartDataClean: []
+      chartData: this.chart.logs,
+      chartDataClean: [],
     }
-  },
-  mounted() {    
-    const { logs, ...other } = this.chartData
-    const map = logs.map((result) => ({ x: result.timestamp, y: result.ldr }))
-    this.chartDataClean = map
   },
   computed: {
     ...mapGetters(['getAllLighting', 'getLightingLog', 'getTime']),
   },
   methods: {
+    getData() {
+      const map = this.chartData.map((result) => ({
+        x: result.timestamp,
+        y: result.ldr,
+      }))
+      return map
+    },
     dataCollection() {
       return {
         datasets: [
@@ -47,7 +50,7 @@ export default {
             borderColor: 'white',
             pointBorderColor: 'black',
             pointBackgroundColor: 'coral',
-            data: this.chartDataClean,
+            data: [],
           },
         ],
       }
