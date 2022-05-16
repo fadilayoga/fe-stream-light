@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
 import Logs from '../views/Logs.vue'
 import Users from '../views/Users.vue'
 import Dashboard from '../views/Dashboard.vue'
@@ -12,7 +11,6 @@ const routes = [
   {
     path: '/',
     name: '',
-    component: Home,
     meta: {
       requiresAuth: true,
     },
@@ -33,6 +31,8 @@ const routes = [
         component: Users,
       },
     ],
+    component: () =>
+      import(/* webpackChunkName: "about" */ '../views/Home.vue'),
   },
   {
     path: '/profile',
@@ -81,9 +81,9 @@ const router = new VueRouter({
   routes,
 })
 
-router.beforeEach(async (to, from, next) => {  
+router.beforeEach(async (to, from, next) => {
   if (to.matched.some((record) => record.meta.requiresAuth)) {
-    if (store.getters.getLoginStatus == null) {      
+    if (store.getters.getLoginStatus == null) {
       try {
         await store.dispatch('auth')
         next()
