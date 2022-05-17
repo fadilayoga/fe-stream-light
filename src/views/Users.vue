@@ -41,7 +41,7 @@
           <img
             v-else
             class="problem-item_userphoto"
-            src="~@/assets/images/lofi_generator.png"
+            src="~@/assets/images/lofi_generator.webp"
             alt=""
           />
           <div class="problem-item_detail">
@@ -154,7 +154,7 @@ export default {
       return `${API_ENDPOINT.STATIC}/${filename}`
     },
     imageUrlAlt(event) {
-      event.target.src = require('@/assets/images/lofi_generator.png')
+      event.target.src = require('@/assets/images/lofi_generator.webp')
     },
     renderRemove(payload) {
       const findIndex = this.users.findIndex((user) => user._id == payload)

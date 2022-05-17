@@ -29,7 +29,7 @@
     <div class="grid-two">
       <img
         class="grid-two_profileimg"
-        src="~@/assets/images/lofi_generator.png"
+        src="~@/assets/images/lofi_generator.webp"
         alt=""
       />
       <h2 class="grid-two_email">{{ user.email }}</h2>
