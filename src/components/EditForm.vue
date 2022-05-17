@@ -204,10 +204,12 @@
       </div>
       <button class="lighting-item_submitbtn" @click="submit()" type="submit">
         <span v-if="!loading">Update</span>
-        <circle2
+        <img
           v-if="loading"
           class="lighting-item_submitbtn-spinner"
-        ></circle2>
+          src="~@/assets/images/spin.svg"
+          alt=""
+        />
       </button>
     </fieldset>
   </form>
@@ -215,7 +217,6 @@
 
 <script>
 import API_ENDPOINT from '../globals/api-endpoint'
-import { Circle2 } from 'vue-loading-spinner'
 import { showAt } from 'vue-breakpoints'
 import {
   required,
@@ -239,7 +240,6 @@ import axios from 'axios'
 import Swal from 'sweetalert2'
 export default {
   components: {
-    Circle2,
     showAt,
   },
   mounted() {

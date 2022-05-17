@@ -201,7 +201,12 @@
       </div>
       <button class="lighting-item_submitbtn" @click="submit()" type="submit">
         <span v-if="!loading">Add</span>
-        <circle2 v-else class="lighting-item_submitbtn-spinner"></circle2>
+        <img
+          v-if="loading"
+          class="lighting-item_submitbtn-spinner"
+          src="~@/assets/images/spin.svg"
+          alt=""
+        />
       </button>
     </fieldset>
   </form>
@@ -209,7 +214,6 @@
 
 <script>
 import API_ENDPOINT from '../globals/api-endpoint'
-import { Circle2 } from 'vue-loading-spinner'
 import { showAt } from 'vue-breakpoints'
 import {
   required,
@@ -230,10 +234,7 @@ const validFile = (value) =>
 const validSize = (value) => !helpers.req(value) || !(value.size > MAX_SIZE)
 import axios from 'axios'
 export default {
-  components: {
-    Circle2,
-    showAt,
-  },
+  components: { showAt },
   data() {
     return {
       addformactive: true,

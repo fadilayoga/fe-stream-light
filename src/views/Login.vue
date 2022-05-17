@@ -21,7 +21,12 @@
       />
       <button @click="login()" class="btn-login">
         <span v-if="!loading">LOGIN</span>
-        <circle2 v-else class="btn-login_spinner"></circle2>
+        <img
+          v-else
+          class="btn-login_spinner"
+          src="~@/assets/images/spin.svg"
+          alt=""
+        />
       </button>
     </div>
     <div class="wave">
@@ -33,17 +38,12 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { Circle2 } from 'vue-loading-spinner'
 
 export default {
-  components: {
-    Circle2,
-  },
   data() {
     return {
       email: '',
       password: '',
-      Circle2,
       loading: false,
     }
   },
@@ -201,8 +201,7 @@ export default {
   }
 
   &_spinner {
-    max-width: 30px;
-    max-height: 30px;
+    max-width: 35px;    
     margin: auto;
   }
 }
@@ -304,9 +303,7 @@ label {
     }
 
     &_spinner {
-      max-width: 25px;
-      max-height: 25px;
-      margin: auto;
+      max-width: 25px;      
     }
   }
 }

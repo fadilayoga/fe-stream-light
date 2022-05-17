@@ -2,7 +2,7 @@
   <div class="container">
     <div class="grid-one">
       <router-link class="logo" to="/"
-        >STREAM <span class="logo-bold">LIGHT</span></router-link
+        >LIGHT <span class="logo-bold">STREAM</span></router-link
       >
       <div class="navbar-menu">
         <div @click="openDialog" class="navbar-dropdown">
