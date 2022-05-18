@@ -5,7 +5,7 @@ module.exports = {
   devServer: {
     disableHostCheck: true,
   },
-  // outputDir: 'C:/inetpub/stream-light-backend/dist',
+  outputDir: 'C:/Apache24/htdocs/stream-light-backend-main/dist',
   lintOnSave: false,
   configureWebpack: {
     plugins: [
