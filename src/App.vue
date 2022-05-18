@@ -1,8 +1,40 @@
 <template>
   <div id="app">
     <router-view />
+    <transition name="toast" appear>
+      <Toast v-if="showToast" :message="message" />
+    </transition>
   </div>
 </template>
+
+<script>
+const Toast = () => import('./components/Toast.vue')
+import { mapGetters } from 'vuex'
+export default {
+  components: {
+    Toast,
+  },
+  data() {
+    return {
+      showToast: false,
+      message: {},
+    }
+  },
+  computed: {
+    ...mapGetters(['getToastMessage']),
+  },
+  watch: {
+    getToastMessage(newVal) {
+      this.message = newVal
+      this.showToast = true
+      setTimeout(() => {
+        this.showToast = false
+        this.message = {}
+      }, 3000)
+    },
+  },
+}
+</script>
 
 <style lang="scss">
 * {
@@ -43,5 +75,16 @@ body {
 
 body.modal-open {
   overflow: hidden;
+}
+
+.toast-enter,
+.toast-leave-to {
+  opacity: 0;
+  transform: translate(-50%, -60px) !important;
+}
+
+.toast-enter-active,
+.toast-leave-active {
+  transition: all 0.3s ease;
 }
 </style>

@@ -36,10 +36,6 @@
     </div>
     <div class="bottom-logs">
       <div class="bottom-logs_export">
-        <!-- <button class="bottom-logs_export-button">
-          <img src="~@/assets/images/description.svg" alt="" />
-          <span>PDF</span>
-        </button> -->
         <button class="bottom-logs_export-button" @click="exportFile">
           <img src="~@/assets/images/spreadsheet.svg" alt="" />
           <span>SPREADSHEET</span>

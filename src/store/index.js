@@ -21,6 +21,7 @@ export default new Vuex.Store({
     },
     loggedin: null,
     role: '',
+    toast: {},
   },
   mutations: {
     SOCKET_ONOPEN(state, event) {
@@ -33,7 +34,6 @@ export default new Vuex.Store({
     SOCKET_ONERROR(state, event) {
       console.error(state, event)
     },
-    // default handler called for all methods
     SOCKET_ONMESSAGE(state, message) {
       const { _id } = message[0]
       const findIndex = state.allLighting.findIndex(
@@ -45,7 +45,6 @@ export default new Vuex.Store({
         state.allLighting.splice(findIndex, 1, message[0])
       }
     },
-    // mutations for reconnect methods
     SOCKET_RECONNECT(state, count) {
       console.info(state, count)
     },
@@ -78,6 +77,9 @@ export default new Vuex.Store({
     },
     ROLE: (state, payload) => {
       state.role = payload
+    },
+    TOAST: (state, payload) => {
+      state.toast = payload
     },
   },
   actions: {
@@ -128,6 +130,9 @@ export default new Vuex.Store({
       commit('ROLE', payload)
       if (payload == 'admin') router.push({ name: 'home' })
     },
+    toast({ commit }, payload) {
+      commit('TOAST', payload)
+    },
   },
   getters: {
     getAllLighting(state) {
@@ -157,6 +162,8 @@ export default new Vuex.Store({
       }
       return false
     },
+    getToastMessage: function (state) {
+      return state.toast
+    },
   },
-  modules: {},
 })

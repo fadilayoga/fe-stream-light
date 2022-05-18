@@ -1,5 +1,9 @@
 <template>
-  <button @mouseover="editicon(true)" @mouseleave="editicon(false)" @click="$emit('updatedata')">
+  <button
+    @mouseover="editicon(true)"
+    @mouseleave="editicon(false)"
+    @click="$emit('updatedata')"
+  >
     <img
       v-if="editiconstatus"
       src="~@/assets/images/icons8-editin.svg"
@@ -32,16 +36,16 @@ export default {
   data() {
     return {
       editiconstatus: false,
-    };
+    }
   },
   methods: {
     editicon: function (arg) {
       if (arg) {
-        this.editiconstatus = true;
+        this.editiconstatus = true
       } else {
-        this.editiconstatus = false;
+        this.editiconstatus = false
       }
     },
   },
-};
+}
 </script>
