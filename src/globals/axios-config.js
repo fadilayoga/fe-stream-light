@@ -9,6 +9,9 @@ axios.interceptors.response.use(
     return response
   },
   function (error) {
+    if (store.getters.getLoginStatus !== null) {
+      store.dispatch('toast', { ...error.response.data })
+    }
     if (error.response.status === 403) {
       store.state.loggedin = false
       if (router.currentRoute.path !== '/login') {
@@ -19,7 +22,6 @@ axios.interceptors.response.use(
         router.push('./401')
       }
     }
-    store.dispatch('toast', { ...error.response.data })
     return Promise.reject(error)
   }
 )

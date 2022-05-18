@@ -128,7 +128,9 @@ export default new Vuex.Store({
     },
     selfUpdate({ commit }, payload) {
       commit('ROLE', payload)
-      if (payload == 'admin') router.push({ name: 'home' })
+      if (payload == 'admin') {
+        router.push({ name: 'home' })
+      }
     },
     toast({ commit }, payload) {
       commit('TOAST', payload)

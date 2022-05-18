@@ -2,9 +2,7 @@
   <div class="login-wrapper">
     <div class="login-form">
       <p class="title">Sign In</p>
-      <p class="title--description">
-        Sign in and start managing your candidates!
-      </p>
+      <p class="title--description">Sign in and start monitoring lightings!</p>
       <input
         v-model="email"
         class="input-email"
@@ -153,6 +151,7 @@ export default {
   background-color: #224957;
   color: white;
   box-sizing: border-box;
+  box-shadow: 1px 3px 5px rgba(0, 0, 0, 0.2);
 }
 
 .input-password {
@@ -167,10 +166,7 @@ export default {
   background-color: #224957;
   color: white;
   box-sizing: border-box;
-}
-
-.pretty {
-  margin-top: 23px;
+  box-shadow: 1px 3px 5px rgba(0, 0, 0, 0.2);
 }
 
 .btn-login {
@@ -186,6 +182,7 @@ export default {
   color: #224957;
   font-size: 16px;
   line-height: 20px;
+  box-shadow: 1px 3px 5px rgba(0, 0, 0, 0.2);
 
   &:hover {
     cursor: pointer;
@@ -201,7 +198,7 @@ export default {
   }
 
   &_spinner {
-    max-width: 35px;    
+    max-width: 35px;
     margin: auto;
   }
 }
@@ -280,10 +277,6 @@ label {
     box-sizing: border-box;
   }
 
-  .pretty {
-    margin-top: 18px;
-  }
-
   .btn-login {
     display: block;
     height: 45px;
@@ -303,7 +296,7 @@ label {
     }
 
     &_spinner {
-      max-width: 25px;      
+      max-width: 25px;
     }
   }
 }

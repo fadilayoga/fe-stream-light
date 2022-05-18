@@ -87,4 +87,17 @@ body.modal-open {
 .toast-leave-active {
   transition: all 0.3s ease;
 }
+
+@media screen and (max-width: 768px) {
+  .toast-enter,
+  .toast-leave-to {
+    opacity: 0;
+    transform: translate(-50%, 45px) !important;
+  }
+
+  .toast-enter-active,
+  .toast-leave-active {
+    transition: all 0.3s ease;
+  }
+}
 </style>

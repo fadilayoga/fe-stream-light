@@ -1,8 +1,15 @@
 <template>
-  <div :key="Math.random()">
-    <span v-if="addAccessButton && getRole" class="nav-indicator-outer"></span>
+  <div :key="getRole">
+    <transition name="indicator" appear>
+      <span
+        v-if="addAccessButton && getRole"
+        class="nav-indicator-outer"
+      ></span>
+    </transition>
     <div class="nav">
-      <span v-if="addAccessButton && getRole" class="nav-indicator"></span>
+      <transition name="indicator" appear>
+        <span v-if="addAccessButton && getRole" class="nav-indicator"></span>
+      </transition>
       <router-link
         to="/"
         class="nav--link"
@@ -47,18 +54,20 @@
           <span>Confirm</span>
         </a>
       </router-link>
-      <button
-        v-if="addAccessButton && getRole"
-        class="nav--link add"
-        @click="openAddForm"
-      >
-        <img
-          class="nav--icon add"
-          src="~@/assets/images/add_user-mobile.svg"
-          alt=""
-        />
-        <span>Add</span>
-      </button>
+      <transition name="fade" appear>
+        <button
+          v-if="addAccessButton && getRole"
+          class="nav--link add"
+          @click="openAddForm"
+        >
+          <img
+            class="nav--icon add"
+            src="~@/assets/images/add_user-mobile.svg"
+            alt=""
+          />
+          <span>Add</span>
+        </button>
+      </transition>
       <router-link
         v-if="getRole"
         to="/access"
@@ -188,7 +197,7 @@ export default {
     &-outer {
       width: 50px;
       height: 50px;
-      background-color: #c72f2f;
+      background-color: #ffffff;
       border-radius: 50%;
       position: fixed;
       bottom: 19px;
@@ -198,5 +207,27 @@ export default {
       box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
     }
   }
+}
+
+.indicator-enter,
+.indicator-leave-to {
+  opacity: 0;
+  transform: translate(-50%, 20px) !important;
+}
+
+.indicator-enter-active,
+.indicator-leave-active {
+  transition: all .3s ease;
+}
+
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+  transform: translateY(20px) !important;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: all .3s ease;
 }
 </style>
