@@ -200,9 +200,9 @@
         <img class="photos-preview_photo" :src="previewimg" alt="" />
       </div>
       <button class="lighting-item_submitbtn" @click="submit()" type="submit">
-        <span v-if="!loading">Add</span>
+        <span v-show="!loading">Add</span>
         <img
-          v-if="loading"
+          v-show="loading"
           class="lighting-item_submitbtn-spinner"
           src="~@/assets/images/spin.svg"
           alt=""

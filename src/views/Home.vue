@@ -162,7 +162,7 @@
                 v-click-outside="closeDialog"
                 class="navbar-dropdown_menu"
               >
-                <router-link to="/profile" class="navbar-dropdown_menu-login"
+                <router-link to="/profile" class="navbar-dropdown_menu-profile"
                   >Profile</router-link
                 >
                 <p @click="logout" class="navbar-dropdown_menu-login">Logout</p>
@@ -219,20 +219,18 @@
         <div class="grid_mobile-grid-two">
           <router-view />
         </div>
-        <bottom-menu />
       </div>
     </show-at>
   </div>
 </template>
 
 <script>
-const BottomMenu = () => import('../components/BottomMenu.vue')
 import { showAt, hideAt } from 'vue-breakpoints'
 import { mapActions } from 'vuex'
 import { mapGetters } from 'vuex'
 export default {
   name: 'Home',
-  components: { hideAt, showAt, BottomMenu },
+  components: { hideAt, showAt },
   mounted: function () {
     document.body.style.backgroundColor = '#2a2e59'
   },

@@ -48,20 +48,14 @@
       />
       <h2 class="grid-two_role">{{ user.role }}</h2>
     </div>
-    <show-at breakpoint="small">
-      <bottom-menu />
-    </show-at>
   </div>
 </template>
 
 <script>
 import API_ENDPOINT from '../globals/api-endpoint'
-const BottomMenu = () => import('../components/BottomMenu.vue')
-import { showAt } from 'vue-breakpoints'
 import { mapActions } from 'vuex'
 import axios from 'axios'
 export default {
-  components: { showAt, BottomMenu },
   data() {
     return {
       profileMenu: false,

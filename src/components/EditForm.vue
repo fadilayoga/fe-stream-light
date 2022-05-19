@@ -203,9 +203,9 @@
         />
       </div>
       <button class="lighting-item_submitbtn" @click="submit()" type="submit">
-        <span v-if="!loading">Update</span>
+        <span v-show="!loading">Update</span>
         <img
-          v-if="loading"
+          v-show="loading"
           class="lighting-item_submitbtn-spinner"
           src="~@/assets/images/spin.svg"
           alt=""

@@ -8,27 +8,33 @@ const routes = [
   {
     path: '/',
     name: '',
-    meta: {
-      requiresAuth: true,
-    },
     component: () =>
       import(/* webpackChunkName: "about" */ '../views/Home.vue'),
     children: [
       {
         path: '',
         name: 'home',
+        meta: {
+          requiresAuth: true,
+        },
         component: () =>
           import(/* webpackChunkName: "about" */ '../views/Dashboard.vue'),
       },
       {
         path: 'confirm',
         name: 'confirm',
+        meta: {
+          requiresAuth: true,
+        },
         component: () =>
           import(/* webpackChunkName: "about" */ '../views/Logs.vue'),
       },
       {
         path: 'access',
         name: 'access',
+        meta: {
+          requiresAuth: true,
+        },
         component: () =>
           import(/* webpackChunkName: "about" */ '../views/Users.vue'),
       },
@@ -71,6 +77,7 @@ const routes = [
   },
   {
     path: '*',
+    name: 'notFound',
     component: () => import(/* webpackChunkName: "about" */ '../views/404.vue'),
   },
 ]

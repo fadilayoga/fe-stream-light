@@ -18,9 +18,9 @@
         @keyup.enter="login()"
       />
       <button @click="login()" class="btn-login">
-        <span v-if="!loading">LOGIN</span>
+        <span v-show="!loading">LOGIN</span>
         <img
-          v-else
+          v-show="loading"
           class="btn-login_spinner"
           src="~@/assets/images/spin.svg"
           alt=""

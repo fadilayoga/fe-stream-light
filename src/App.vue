@@ -4,15 +4,22 @@
     <transition name="toast" appear>
       <Toast v-if="showToast" :message="message" />
     </transition>
+    <show-at v-if="validRoute()" breakpoint="small">
+      <bottom-menu />
+    </show-at>
   </div>
 </template>
 
 <script>
 const Toast = () => import('./components/Toast.vue')
+const BottomMenu = () => import('./components/BottomMenu.vue')
+import { showAt } from 'vue-breakpoints'
 import { mapGetters } from 'vuex'
 export default {
   components: {
     Toast,
+    BottomMenu,
+    showAt,
   },
   data() {
     return {
@@ -22,6 +29,12 @@ export default {
   },
   computed: {
     ...mapGetters(['getToastMessage']),
+  },
+  methods: {
+    validRoute() {
+      if (this.$route.meta.requiresAuth) return true
+      return false
+    },
   },
   watch: {
     getToastMessage(newVal) {
