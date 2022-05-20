@@ -12,7 +12,6 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import API_ENDPOINT from '../globals/api-endpoint'
 import axios from 'axios'
 const MainChart = () => import('../components/MainChart.vue')
 export default {
@@ -43,7 +42,7 @@ export default {
     },
     getAllData() {
       axios
-        .get(`${API_ENDPOINT.LIGHTING_ALL}`)
+        .get(process.env.VUE_APP_LIGHTING_ALL)
         .then((response) => {
           this.setData(response.data)
         })

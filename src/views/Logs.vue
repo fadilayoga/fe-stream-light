@@ -78,7 +78,6 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import API_ENDPOINT from '../globals/api-endpoint'
 import axios from 'axios'
 import Swal from 'sweetalert2'
 
@@ -102,7 +101,7 @@ export default {
   methods: {
     getDataPage(page) {
       axios
-        .get(`${API_ENDPOINT.PROBLEM_LOGS}?page=${page}&limit=${this.limit}`)
+        .get(`${process.env.VUE_APP_PROBLEM_LOGS}?page=${page}&limit=${this.limit}`)
         .then((response) => {
           this.pages = page
           this.total_pages = response.data.total_pages
@@ -143,7 +142,7 @@ export default {
         if (result.isConfirmed) {
           try {
             const requestResult = await axios.post(
-              `${API_ENDPOINT.PROBLEM_LOGS}/${id}`
+              `${process.env.VUE_APP_PROBLEM_LOGS}/${id}`
             )
             Swal.fire('Deleted!', 'Your file has been deleted.', 'success')
               .then((result) => {
@@ -165,7 +164,7 @@ export default {
     },
     exportFile: async function () {
       try {
-        const result = await axios.get(`${API_ENDPOINT.EXPORT_FILE}`)
+        const result = await axios.get(process.env.VUE_APP_EXPORT_FILE)
         window.open(result.data);
       } catch (err) {
         console.log(err)

@@ -6,17 +6,16 @@ import store from './store'
 import VueNativeSock from 'vue-native-websocket'
 import vClickOutside from 'v-click-outside'
 import device from 'vue-device-detector'
-import CONFIG from './globals/config'
 import Vuelidate from 'vuelidate'
-import './globals/axios-config'
+import './utils/axios-config'
 
-// const registrationToken = () => import('./utils/registration-token-helper')
+const registrationToken = () => import('./utils/registration-token-helper')
 
-// registrationToken().then((tokenHelper) => {
-//   tokenHelper.default.getToken()
-// })
+registrationToken().then((tokenHelper) => {
+  tokenHelper.default.getToken()
+})
 
-Vue.use(VueNativeSock, CONFIG.WEB_SOCKET, {
+Vue.use(VueNativeSock, process.env.VUE_APP_WEB_SOCKET, {
   store: store,
   format: 'json',
   reconnection: true, // (Boolean) whether to reconnect automatically (false)

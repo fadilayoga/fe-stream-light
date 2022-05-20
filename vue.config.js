@@ -3,9 +3,8 @@ const path = require('path')
 
 module.exports = {
   devServer: {
-    disableHostCheck: true,
+    proxy: 'http://localhost:3000/',
   },
-  // outputDir: 'C:/Apache24/htdocs/stream-light-backend-main/dist',
   lintOnSave: false,
   configureWebpack: {
     plugins: [

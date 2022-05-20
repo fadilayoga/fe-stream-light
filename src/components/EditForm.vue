@@ -216,7 +216,6 @@
 </template>
 
 <script>
-import API_ENDPOINT from '../globals/api-endpoint'
 import { showAt } from 'vue-breakpoints'
 import {
   required,
@@ -246,7 +245,7 @@ export default {
     if (!this.userdataprops.profilePicture) {
       this.previewimg = null
     } else {
-      this.previewimg = `${API_ENDPOINT.STATIC}/${this.userdataprops.profilePicture}`
+      this.previewimg = `${process.env.VUE_APP_STATIC}/${this.userdataprops.profilePicture}`
     }
   },
   data() {

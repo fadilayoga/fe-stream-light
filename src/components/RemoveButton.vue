@@ -28,7 +28,6 @@ button {
 </style>
 
 <script>
-import API_ENDPOINT from '../globals/api-endpoint'
 import Swal from 'sweetalert2'
 import axios from 'axios'
 export default {
@@ -59,7 +58,7 @@ export default {
       })
       if (swal1.isConfirmed) {
         try {
-          await axios.delete(`${API_ENDPOINT.USERS}/${this.id}`)
+          await axios.delete(`${process.env.VUE_APP_USERS}/${this.id}`)
           const swal2 = await Swal.fire(
             'Deleted!',
             'This user has been deleted.',

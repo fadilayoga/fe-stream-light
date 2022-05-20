@@ -84,7 +84,6 @@
 </template>
 
 <script>
-import API_ENDPOINT from '../globals/api-endpoint'
 const AddForm = () => import('../components/AddForm.vue')
 const EditForm = () => import('../components/EditForm.vue')
 const EditButton = () => import('../components/EditButton.vue')
@@ -116,7 +115,7 @@ export default {
   },
   mounted: async function () {
     try {
-      const result = await axios.get(`${API_ENDPOINT.USERS}`)
+      const result = await axios.get(process.env.VUE_APP_USERS)
       this.users = result.data
     } catch (err) {
       console.log(err)
@@ -151,7 +150,7 @@ export default {
       document.body.classList.remove('modal-open')
     },
     imgUrl: function (filename) {
-      return `${API_ENDPOINT.STATIC}/${filename}`
+      return `${process.env.VUE_APP_STATIC}/${filename}`
     },
     imageUrlAlt(event) {
       event.target.src = require('@/assets/images/lofi_generator.webp')

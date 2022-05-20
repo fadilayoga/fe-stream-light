@@ -270,7 +270,7 @@ export default {
   grid-template-columns: 230px auto;
   grid-template-rows: 60px auto;
   gap: 10px;
-  padding: 10px;
+  padding: 16px 10px 10px 10px;
   max-width: 1366px;
   margin: auto;
 }

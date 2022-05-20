@@ -1,14 +1,13 @@
 import { initializeApp } from 'firebase/app'
 import { getMessaging, getToken, onMessage } from 'firebase/messaging'
-import CONFIG from '../globals/config'
 
 initializeApp({
-  apiKey: CONFIG.API_KEY,
-  authDomain: CONFIG.AUTH_DOMAIN,
-  projectId: CONFIG.PROJECT_ID,
-  storageBucket: CONFIG.STORAGE_BUCKET,
-  messagingSenderId: CONFIG.MESSAGING_SENDER_ID,
-  appId: CONFIG.APP_ID,
+  apiKey: process.env.VUE_APP_API_KEY,
+  authDomain: process.env.VUE_APP_AUTH_DOMAIN,
+  projectId: process.env.VUE_APP_PROJECT_ID,
+  storageBucket: process.env.VUE_APP_STORAGE_BUCKET,
+  messagingSenderId: process.env.VUE_APP_MESSAGING_SENDER_ID,
+  appId: process.env.VUE_APP_APP_ID,
 })
 
 const messaging = getMessaging()
@@ -30,7 +29,9 @@ onMessage(messaging, (payload) => {
 const registrationToken = {
   getToken: async function () {
     try {
-      const token = await getToken(messaging, { vapidKey: CONFIG.VAPID_KEY })
+      const token = await getToken(messaging, {
+        vapidKey: process.env.VUE_APP_VAPID_KEY,
+      })
       console.log(token)
     } catch (err) {
       console.log('An error occurred while retrieving token. ', err)

@@ -213,7 +213,6 @@
 </template>
 
 <script>
-import API_ENDPOINT from '../globals/api-endpoint'
 import { showAt } from 'vue-breakpoints'
 import {
   required,
@@ -273,7 +272,7 @@ export default {
         formData.append('gender', this.gender)
 
         try {
-          const result = await axios.post(`${API_ENDPOINT.USERS}`, formData)
+          const result = await axios.post(process.env.VUE_APP_USERS, formData)
           this.$emit('reRender', result.data)
           this.resetForm()
         } catch (err) {

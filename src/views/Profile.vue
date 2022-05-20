@@ -52,7 +52,6 @@
 </template>
 
 <script>
-import API_ENDPOINT from '../globals/api-endpoint'
 import { mapActions } from 'vuex'
 import axios from 'axios'
 export default {
@@ -65,7 +64,7 @@ export default {
   mounted: async function () {
     document.body.style.backgroundColor = '#2a2e59'
     try {
-      const result = await axios.get(`${API_ENDPOINT.AUTH}`)
+      const result = await axios.get(process.env.VUE_APP_AUTH)
       this.user = result.data
     } catch (err) {
       console.log(err)

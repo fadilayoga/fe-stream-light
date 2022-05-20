@@ -3,7 +3,6 @@ import Vuex from 'vuex'
 import moment from 'moment'
 import axios from 'axios'
 import router from '../router'
-import API_ENDPOINT from '../globals/api-endpoint'
 
 Vue.use(Vuex)
 
@@ -97,7 +96,7 @@ export default new Vuex.Store({
     },
     async auth({ commit }) {
       try {
-        const result = await axios.get(`${API_ENDPOINT.AUTH}`)
+        const result = await axios.get(process.env.VUE_APP_AUTH)
         commit('AUTH', true)
         commit('ROLE', result.data.role)
       } catch (err) {
@@ -107,7 +106,7 @@ export default new Vuex.Store({
     },
     async login({ commit }, { email, password }) {
       try {
-        const result = await axios.post(`${API_ENDPOINT.LOGIN}`, {
+        const result = await axios.post(process.env.VUE_APP_LOGIN, {
           email: email,
           password: password,
         })
@@ -119,7 +118,7 @@ export default new Vuex.Store({
     },
     async logout({ commit }) {
       try {
-        await axios.get(`${API_ENDPOINT.LOGOUT}`)
+        await axios.get(process.env.VUE_APP_LOGOUT)
         commit('AUTH', false)
         router.push({ name: 'login' })
       } catch (err) {
