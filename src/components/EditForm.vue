@@ -287,7 +287,7 @@ export default {
 
         try {
           const result = await axios.patch(
-            `${API_ENDPOINT.USERS}/${this.id}`,
+            `${process.env.VUE_APP_USERS}/${this.id}`,
             formData
           )
           this.$emit('reRender', result.data.newData)
@@ -316,7 +316,7 @@ export default {
       if (swal1.isConfirmed) {
         try {
           const result = await axios.delete(
-            `${API_ENDPOINT.PICTURE}/${this.id}`
+            `${process.env.VUE_APP_PICTURE}/${this.id}`
           )
           const swal2 = await Swal.fire(
             'Deleted!',
@@ -412,7 +412,7 @@ export default {
       this.role = newVal.role
       this.gender = newVal.gender
       if (newVal.profilePicture != null) {
-        this.previewimg = `${API_ENDPOINT.STATIC}/${newVal.profilePicture}`
+        this.previewimg = `${process.env.VUE_APP_STATIC}/${newVal.profilePicture}`
       } else {
         this.previewimg = newVal.profilePicture
       }

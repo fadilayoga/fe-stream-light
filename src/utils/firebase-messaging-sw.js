@@ -14,6 +14,7 @@ initializeApp({
 self.addEventListener('notificationclick', function (event) {
   const url = event.notification?.data?.FCM_MSG?.data?.link
   event.notification.close() // Android needs explicit close.
+  if (!url) return
   event.waitUntil(
     clients.matchAll({ type: 'window' }).then((windowClients) => {
       // Check if there is already a window/tab open with the target URL

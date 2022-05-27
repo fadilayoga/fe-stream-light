@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 import moment from 'moment'
 import axios from 'axios'
 import router from '../router'
+const registrationToken = () => import('../utils/registration-token-helper')
 
 Vue.use(Vuex)
 
@@ -106,19 +107,30 @@ export default new Vuex.Store({
     },
     async login({ commit }, { email, password }) {
       try {
+        const token = await this.getters.getToken()
         const result = await axios.post(process.env.VUE_APP_LOGIN, {
           email: email,
           password: password,
+          registration_ids: token,
         })
         commit('AUTH', true)
         commit('ROLE', result.data.role)
       } catch (err) {
-        console.log(err)
+        if (err.error == 'firebase_messaging') {
+          commit('TOAST', {
+            error: 'token',
+            message:
+              'The notification permission was not granted and blocked instead',
+          })
+        }
       }
     },
     async logout({ commit }) {
       try {
-        await axios.get(process.env.VUE_APP_LOGOUT)
+        const token = await this.getters.getToken()
+        await axios.post(process.env.VUE_APP_LOGOUT, {
+          registration_ids: token,
+        })
         commit('AUTH', false)
         router.push({ name: 'login' })
       } catch (err) {
@@ -133,6 +145,15 @@ export default new Vuex.Store({
     },
     toast({ commit }, payload) {
       commit('TOAST', payload)
+    },
+    subscribeTopic(payload) {
+      try {
+        axios.post(process.env.VUE_APP_REGISTRATION_TOKEN, {
+          registration_ids: payload,
+        })
+      } catch (err) {
+        console.log(err)
+      }
     },
   },
   getters: {
@@ -165,6 +186,19 @@ export default new Vuex.Store({
     },
     getToastMessage: function (state) {
       return state.toast
+    },
+    getToken: () => async () => {
+      try {
+        const helper = await registrationToken()
+        const { token } = await helper.default.getToken()
+        return token
+      } catch (err) {
+        throw { ...err }
+      }
+    },
+    deleteToken: () => async () => {
+      const helper = await registrationToken()
+      await helper.default.deleteToken()
     },
   },
 })

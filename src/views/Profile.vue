@@ -26,16 +26,17 @@
         </div>
       </div>
     </div>
-    <div class="grid-two">
+    <div v-for="item in user" :key="item._id" class="grid-two">
       <img
         class="grid-two_profileimg"
-        src="~@/assets/images/lofi_generator.webp"
+        :src="imgUrl(item.profilePicture)"
+        @error="imageUrlAlt"
         alt=""
       />
-      <h2 class="grid-two_email">{{ user.email }}</h2>
-      <p class="grid-two_name">{{ user.name }}</p>
+      <h2 class="grid-two_email">{{ item.email }}</h2>
+      <p class="grid-two_name">{{ item.name }}</p>
       <img
-        v-if="user.gender === 'man'"
+        v-if="item.gender === 'man'"
         class="grid-two_gender"
         src="~@/assets/images/male_icon.svg"
         alt=""
@@ -46,7 +47,7 @@
         src="~@/assets/images/female_icon.svg"
         alt=""
       />
-      <h2 class="grid-two_role">{{ user.role }}</h2>
+      <h2 class="grid-two_role">{{ item.role }}</h2>
     </div>
   </div>
 </template>
@@ -58,14 +59,14 @@ export default {
   data() {
     return {
       profileMenu: false,
-      user: {},
+      user: [],
     }
   },
   mounted: async function () {
     document.body.style.backgroundColor = '#2a2e59'
     try {
       const result = await axios.get(process.env.VUE_APP_AUTH)
-      this.user = result.data
+      this.user.push(result.data)
     } catch (err) {
       console.log(err)
     }
@@ -80,6 +81,12 @@ export default {
     },
     closeDialog() {
       this.profileMenu = false
+    },
+    imgUrl: function (filename) {
+      return `${process.env.VUE_APP_STATIC}/${filename}`
+    },
+    imageUrlAlt(event) {
+      event.target.src = require('@/assets/images/lofi_generator.webp')
     },
   },
 }

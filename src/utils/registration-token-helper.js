@@ -1,5 +1,10 @@
 import { initializeApp } from 'firebase/app'
-import { getMessaging, getToken, onMessage } from 'firebase/messaging'
+import {
+  getMessaging,
+  getToken,
+  deleteToken,
+  onMessage,
+} from 'firebase/messaging'
 
 initializeApp({
   apiKey: process.env.VUE_APP_API_KEY,
@@ -11,30 +16,43 @@ initializeApp({
 })
 
 const messaging = getMessaging()
+const option = { vapidKey: process.env.VUE_APP_VAPID_KEY }
 
 onMessage(messaging, (payload) => {
   const notificationTitle = payload.notification.title
   const notificationOptions = {
     body: payload.notification.body,
-    icon: 'https://maxst.icons8.com/vue-static/landings/page-index/products/logo/generatedPhotos.png',
+    icon: payload.data.icon,
   }
-
-  if (Notification.permission === 'granted') {
-    navigator.serviceWorker.getRegistration().then((reg) => {
-      reg.showNotification(notificationTitle, notificationOptions)
-    })
+  const notification = new Notification(notificationTitle, notificationOptions)
+  notification.onclick = function (event) {
+    event.preventDefault()
+    if (!payload.data.link) {
+      return notification.close()
+    }
+    window.open(payload.data.link, '_blank')
+    notification.close()
   }
 })
 
 const registrationToken = {
   getToken: async function () {
+    let token
     try {
-      const token = await getToken(messaging, {
-        vapidKey: process.env.VUE_APP_VAPID_KEY,
-      })
-      console.log(token)
+      token = await getToken(messaging, option)
     } catch (err) {
-      console.log('An error occurred while retrieving token. ', err)
+      throw {
+        error: 'firebase_messaging',
+        message: err,
+      }
+    }
+    return { token }
+  },
+  deleteToken: async function () {
+    try {
+      await deleteToken(messaging, option)
+    } catch (err) {
+      console.log('An error occurred while retrieving token', err)
     }
   },
 }

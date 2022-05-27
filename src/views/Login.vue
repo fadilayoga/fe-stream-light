@@ -57,11 +57,15 @@ export default {
   methods: {
     login: async function () {
       this.loading = true
-      await this.$store.dispatch('login', {
-        email: this.email,
-        password: this.password,
-      })
-      this.loading = false
+      try {
+        await this.$store.dispatch('login', {
+          email: this.email,
+          password: this.password,
+        })
+        this.loading = false
+      } catch (err) {
+        this.loading = false
+      }
     },
   },
   watch: {
