@@ -2,52 +2,63 @@
   <div class="logs">
     <h5>Table <span class="title-bold">Confirm</span></h5>
     <div class="logs-table">
-      <table>
-        <tr>
-          <th class="ta-center">#</th>
-          <th>Lighting</th>
-          <th>Problem</th>
-          <th class="ta-center">Issue Date</th>
-          <th class="ta-center">Fixed</th>
-          <!-- <th>Fixed Date</th> -->
-          <th class="ta-center">Location</th>
-        </tr>
-        <tr v-for="(data, index) in logs" :key="data._id">
-          <td class="ta-center">{{ (pages - 1) * limit + (index + 1) }}</td>
-          <td v-if="data.log">{{ data.log.lighting.name }}</td>
-          <td v-else class="ta-center">-</td>
-          <td>{{ data.problem }}</td>
-          <td class="ta-center">{{ getDate(data.timestamp) }}</td>
-          <td v-if="!data.solved" class="ta-center">
-            <button @click="updateStatus(data._id)">CONFIRM</button>
-          </td>
-          <td v-else class="ta-center">
-            {{ getDate(data.solved.confirmed_date) }}
-          </td>
-          <!-- <td>16/11/2021</td> -->
-          <td class="ta-center">
-            <button v-if="getLocation(data)" @click="seeLocation(data)">
-              LOCATION
-            </button>
-            <span v-else>-</span>
-          </td>
-        </tr>
+      <table ref="table_export">
+        <thead>
+          <tr>
+            <th class="ta-center">#</th>
+            <th>Lighting</th>
+            <th>Problem</th>
+            <th>Issue Date</th>
+            <th>Fixed</th>
+            <th>Location</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            :class="index % 2 == 0 ? 'even' : 'odd'"
+            v-for="(data, index) in logs"
+            :key="data._id"
+          >
+            <td class="ta-center">{{ (pages - 1) * limit + (index + 1) }}</td>
+            <td>{{ data.log.lighting.name }}</td>
+            <td>{{ data.problem }}</td>
+            <td>{{ data.timestamp }}</td>
+            <td v-if="!data.solved">
+              <button @click="updateStatus(data._id)">CONFIRM</button>
+            </td>
+            <td v-else>{{ data.solved.confirmed_date }}</td>
+            <td>
+              <button v-if="getLocation(data)" @click="seeLocation(data)">
+                Maps
+              </button>
+              <span v-else>Unspecified</span>
+            </td>
+          </tr>
+        </tbody>
       </table>
     </div>
     <div class="bottom-logs">
       <div class="bottom-logs_export">
-        <button class="bottom-logs_export-button" @click="exportFile">
-          <img src="~@/assets/images/spreadsheet.svg" alt="" />
-          <span>SPREADSHEET</span>
+        <button class="bottom-logs_export-button" @click="exportCsvFile">
+          <span>CSV</span>
+        </button>
+        <button class="bottom-logs_export-button" @click="exportExcelFile">
+          <span>EXCEL</span>
+        </button>
+        <button class="bottom-logs_export-button" @click="exportPdfFile">
+          <span>PDF</span>
+        </button>
+        <button @click="print" class="bottom-logs_export-button">
+          <span>PRINT</span>
         </button>
       </div>
       <div class="pagination">
         <div
           v-if="pages !== 1"
           @click="getDataPage(previous)"
-          class="pagination-item"
+          class="pagination-item-fb"
         >
-          <span>&#60;</span>
+          <span>Previous</span>
         </div>
         <template v-for="n in total_pages">
           <template v-if="(n > pages - 3) & (n < pages + 3)">
@@ -67,9 +78,9 @@
         <div
           v-if="pages !== total_pages && total_pages != 0"
           @click="getDataPage(next)"
-          class="pagination-item"
+          class="pagination-item-fb"
         >
-          <span>&#62;</span>
+          <span>Next</span>
         </div>
       </div>
     </div>
@@ -80,6 +91,11 @@
 import { mapGetters } from 'vuex'
 import axios from 'axios'
 import Swal from 'sweetalert2'
+import jsPDF from 'jspdf'
+import autoTable from 'jspdf-autotable'
+import print from 'print-js'
+
+const doc = new jsPDF()
 
 export default {
   data() {
@@ -90,6 +106,8 @@ export default {
       previous: 0,
       limit: 7,
       logs: [],
+      export_log: [],
+      previewOpenCallback: false,
     }
   },
   mounted() {
@@ -101,7 +119,9 @@ export default {
   methods: {
     getDataPage(page) {
       axios
-        .get(`${process.env.VUE_APP_PROBLEM_LOGS}?page=${page}&limit=${this.limit}`)
+        .get(
+          `${process.env.VUE_APP_PROBLEM_LOGS}?page=${page}&limit=${this.limit}`
+        )
         .then((response) => {
           this.pages = page
           this.total_pages = response.data.total_pages
@@ -141,7 +161,7 @@ export default {
       }).then(async (result) => {
         if (result.isConfirmed) {
           try {
-            const requestResult = await axios.post(
+            const requestResult = await axios.patch(
               `${process.env.VUE_APP_PROBLEM_LOGS}/${id}`
             )
             Swal.fire('Deleted!', 'Your file has been deleted.', 'success')
@@ -162,23 +182,65 @@ export default {
         }
       })
     },
-    exportFile: async function () {
+    exportCsvFile: async function () {
       try {
-        const result = await axios.get(process.env.VUE_APP_EXPORT_FILE)
-        window.open(result.data);
+        const result = await axios.get(process.env.VUE_APP_EXPORT_FILE_CSV)
+        window.open(result.data)
       } catch (err) {
         console.log(err)
       }
+    },
+    exportExcelFile: async function () {
+      try {
+        const result = await axios.get(process.env.VUE_APP_EXPORT_FILE_EXCEL)
+        window.open(result.data)
+      } catch (err) {
+        console.log(err)
+      }
+    },
+    exportPdfFile: async function () {
+      try {
+        const result = await axios.get(process.env.VUE_APP_EXPORT_FILE)
+        autoTable(doc, {
+          body: result.data,
+          columns: [
+            { header: 'Lighting', dataKey: 'lighting_name' },
+            { header: 'Problem', dataKey: 'problem' },
+            { header: 'Issue Date', dataKey: 'timestamp' },
+            { header: 'Fixed Date', dataKey: 'solved' },
+            { header: 'Latitude', dataKey: 'latitude' },
+            { header: 'Longtitude', dataKey: 'longtitude' },
+          ],
+        })
+        doc.save('table.pdf')
+      } catch (err) {
+        console.log(err)
+      }
+    },
+    async print() {
+      const result = await axios.get(process.env.VUE_APP_EXPORT_FILE)
+      print({
+        printable: result.data,
+        properties: [
+          { field: 'lighting_name', displayName: 'Lighting' },
+          { field: 'problem', displayName: 'Problem' },
+          { field: 'timestamp', displayName: 'Issue Date' },
+          { field: 'solved', displayName: 'Fixed Date' },
+          { field: 'latitude', displayName: 'Latitude' },
+          { field: 'longtitude', displayName: 'Longtitude' },
+        ],
+        type: 'json',
+      })
     },
   },
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 .logs {
   height: fit-content;
   border-radius: 10px;
-  background-color: $dark-violet;
+  background-color: rgba(0, 0, 0, 0.24);
   padding: 15px;
   box-sizing: border-box;
   display: flex;
@@ -216,16 +278,28 @@ export default {
   font-weight: 300;
 }
 
-td,
-th {
-  border: 1px solid #dddddd;
+td {
+  color: white;
   text-align: left;
   padding: 8px;
-  font-weight: 300;
+  font-weight: 200;
+  font-size: 14px;
+  border-bottom: 1px solid 040620;
+  padding-bottom: 1rem;
 }
 
 th {
-  font-weight: 400;
+  color: white;
+  text-align: left;
+  padding: 8px;
+  font-weight: 300;
+  font-size: 15px;
+  border-bottom: 1px solid 040620;
+}
+
+tr {
+  padding: 10px 0;
+  border-bottom: 1px solid rgb(4, 6, 32);
 }
 
 .ta-center {
@@ -240,6 +314,7 @@ th {
 
 .pagination {
   display: flex;
+  align-items: center;
   padding: 2px;
   border-radius: 3px;
   gap: 2px;
@@ -249,9 +324,23 @@ th {
     align-items: center;
     width: 25px;
     height: 25px;
-    background-color: #dddddd;
+    background-color: #bdbdbd;
     border-radius: 3px;
     cursor: pointer;
+
+    &:active {
+      background-color: rgb(160, 160, 160);
+    }
+
+    &-fb {
+      cursor: pointer;
+      margin: 0 5px;
+      color: white;
+
+      &:active {
+        color: rgb(160, 160, 160);
+      }
+    }
   }
 }
 
@@ -266,12 +355,30 @@ button {
 
   &_export {
     display: flex;
-    gap: 10px;
+    gap: 1px;
     &-button {
       display: flex;
       align-items: center;
       gap: 3px;
+      padding: 5px 10px;
+      color: white;
+      background: #474d84;
+
+      &:hover {
+        color: #fff;
+        background-color: #3a3e6b;
+      }
+
+      &:active {
+        transform: translate(0, 1px);
+      }
     }
+  }
+}
+
+@media only print {
+  #export_table {
+    display: block;
   }
 }
 
@@ -324,7 +431,6 @@ button {
 
   td,
   th {
-    border: 1px solid #dddddd;
     text-align: left;
     padding: 8px;
     font-weight: 300;
@@ -350,6 +456,7 @@ button {
     padding: 2px;
     border-radius: 3px;
     gap: 2px;
+
     &-item {
       display: flex;
       justify-content: center;

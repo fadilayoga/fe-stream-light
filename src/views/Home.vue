@@ -232,7 +232,7 @@ export default {
   name: 'Home',
   components: { hideAt, showAt },
   mounted: function () {
-    document.body.style.backgroundColor = '#2a2e59'
+    document.body.style.background = 'radial-gradient(farthest-side ellipse at 10% 0,#333867,#17193b)'
   },
   destroyed: function () {
     document.body.style.backgroundColor = null
@@ -450,7 +450,6 @@ export default {
           top: 0;
           width: 100%;
           height: 80px;
-          background-color: $violet;
           &-navbar {
             width: fit-content;
             position: relative;

@@ -8,6 +8,7 @@ import vClickOutside from 'v-click-outside'
 import device from 'vue-device-detector'
 import Vuelidate from 'vuelidate'
 import './utils/axios-config'
+import Print from 'vue-print-nb'
 
 const registrationToken = () => import('./utils/registration-token-helper')
 
@@ -26,6 +27,7 @@ Vue.use(VueNativeSock, process.env.VUE_APP_WEB_SOCKET, {
 Vue.use(vClickOutside)
 Vue.use(device)
 Vue.use(Vuelidate)
+Vue.use(Print)
 Vue.config.productionTip = false
 Vue.config.devtools = true
 
