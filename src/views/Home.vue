@@ -235,7 +235,7 @@ export default {
     document.body.style.background = 'radial-gradient(farthest-side ellipse at 10% 0,#333867,#17193b)'
   },
   destroyed: function () {
-    document.body.style.backgroundColor = null
+    document.body.style.background = null
   },
   data() {
     return {

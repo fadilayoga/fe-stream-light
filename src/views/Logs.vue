@@ -327,6 +327,7 @@ tr {
     background-color: #bdbdbd;
     border-radius: 3px;
     cursor: pointer;
+    font-weight: 300;
 
     &:active {
       background-color: rgb(160, 160, 160);
@@ -336,6 +337,7 @@ tr {
       cursor: pointer;
       margin: 0 5px;
       color: white;
+      font-weight: 300;
 
       &:active {
         color: rgb(160, 160, 160);
@@ -363,6 +365,7 @@ button {
       padding: 5px 10px;
       color: white;
       background: #474d84;
+      font-weight: 300;
 
       &:hover {
         color: #fff;

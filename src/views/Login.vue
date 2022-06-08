@@ -46,10 +46,10 @@ export default {
     }
   },
   mounted: function () {
-    document.body.style.backgroundColor = '#E5E5E5'
+    document.body.style.background = '#E5E5E5'
   },
   destroyed: function () {
-    document.body.style.backgroundColor = null
+    document.body.style.background = null
   },
   computed: {
     ...mapGetters(['getLoginStatus']),

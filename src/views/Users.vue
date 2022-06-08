@@ -225,7 +225,7 @@ export default {
   }
 
   &-item {
-    background-color: rgba(244, 244, 245, 0.2);
+    background-color: rgba(0, 0, 0, 0.24);
     border-radius: 10px;
     color: white;
     display: flex;
@@ -329,7 +329,7 @@ export default {
     }
 
     &-item {
-      background-color: rgba(244, 244, 245, 0.2);
+      background-color: rgba(0, 0, 0, 0.24);
       border-radius: 10px;
       color: white;
       display: flex;
