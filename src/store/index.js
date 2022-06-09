@@ -172,6 +172,10 @@ export default new Vuex.Store({
       let now = moment(pastTime).format('DD-MM-YYYY/HH:mm:ss')
       return now
     },
+    fileName: () => {
+      let now = moment().format('DMYYHms')
+      return now
+    },
     getForm(state) {
       return state.form
     },
@@ -195,10 +199,6 @@ export default new Vuex.Store({
       } catch (err) {
         throw { ...err }
       }
-    },
-    deleteToken: () => async () => {
-      const helper = await registrationToken()
-      await helper.default.deleteToken()
     },
   },
 })

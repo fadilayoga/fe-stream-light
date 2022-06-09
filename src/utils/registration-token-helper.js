@@ -1,10 +1,5 @@
 import { initializeApp } from 'firebase/app'
-import {
-  getMessaging,
-  getToken,
-  deleteToken,
-  onMessage,
-} from 'firebase/messaging'
+import { getMessaging, getToken, onMessage } from 'firebase/messaging'
 
 initializeApp({
   apiKey: process.env.VUE_APP_API_KEY,
@@ -18,21 +13,23 @@ initializeApp({
 const messaging = getMessaging()
 const option = { vapidKey: process.env.VUE_APP_VAPID_KEY }
 
-onMessage(messaging, (payload) => {
+function showNotification(notificationTitle, notificationOptions) {
+  Notification.requestPermission(function (result) {
+    if (result === 'granted') {
+      navigator.serviceWorker.ready.then(function (registration) {
+        registration.showNotification(notificationTitle, notificationOptions)
+      })
+    }
+  })
+}
+
+onMessage(messaging, async (payload) => {
   const notificationTitle = payload.notification.title
   const notificationOptions = {
     body: payload.notification.body,
     icon: payload.data.icon,
   }
-  const notification = new Notification(notificationTitle, notificationOptions)
-  notification.onclick = function (event) {
-    event.preventDefault()
-    if (!payload.data.link) {
-      return notification.close()
-    }
-    window.open(payload.data.link, '_blank')
-    notification.close()
-  }
+  showNotification(notificationTitle, notificationOptions)
 })
 
 const registrationToken = {
@@ -47,13 +44,6 @@ const registrationToken = {
       }
     }
     return { token }
-  },
-  deleteToken: async function () {
-    try {
-      await deleteToken(messaging, option)
-    } catch (err) {
-      console.log('An error occurred while retrieving token', err)
-    }
   },
 }
 

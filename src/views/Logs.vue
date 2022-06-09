@@ -94,6 +94,7 @@ import Swal from 'sweetalert2'
 import jsPDF from 'jspdf'
 import autoTable from 'jspdf-autotable'
 import print from 'print-js'
+import fileDownload from 'js-file-download'
 
 const doc = new jsPDF()
 
@@ -114,7 +115,7 @@ export default {
     this.getDataPage(this.pages)
   },
   computed: {
-    ...mapGetters(['getDate']),
+    ...mapGetters(['getDate', 'fileName']),
   },
   methods: {
     getDataPage(page) {
@@ -184,16 +185,20 @@ export default {
     },
     exportCsvFile: async function () {
       try {
-        const result = await axios.get(process.env.VUE_APP_EXPORT_FILE_CSV)
-        window.open(result.data)
+        const result = await axios.get(process.env.VUE_APP_EXPORT_FILE_CSV, {
+          responseType: 'blob',
+        })
+        fileDownload(result.data, `Report-${this.fileName}.csv`)
       } catch (err) {
         console.log(err)
       }
     },
     exportExcelFile: async function () {
       try {
-        const result = await axios.get(process.env.VUE_APP_EXPORT_FILE_EXCEL)
-        window.open(result.data)
+        const result = await axios.get(process.env.VUE_APP_EXPORT_FILE_EXCEL, {
+          responseType: 'blob',
+        })
+        fileDownload(result.data, `Report-${this.fileName}.xlsx`)
       } catch (err) {
         console.log(err)
       }
